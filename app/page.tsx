@@ -582,7 +582,7 @@ function WorkTimelineCard({
 						<button
 							type="button"
 							onClick={onOpen}
-							className="inline-flex items-center justify-center rounded-full border-2 border-cyan-300 bg-cyan-300 px-5 py-2 text-xs font-black uppercase tracking-[0.22em] text-slate-950 transition-transform duration-200 hover:-translate-y-1"
+							className="inline-flex items-center justify-center rounded-full border-2 border-cyan-300 bg-cyan-300 px-5 py-2 text-xs font-black uppercase tracking-[0.22em] text-slate-950 transition-transform duration-200 hover:-translate-y-1 cursor-pointer"
 						>
 							More Detail
 						</button>
@@ -599,6 +599,7 @@ export default function Home() {
 	const [isDeleting, setIsDeleting] = useState(false);
 	const [selectedDetailEntry, setSelectedDetailEntry] =
 		useState<ExperienceEntry | null>(null);
+	const [modalVisible, setModalVisible] = useState(false);
 
 	useEffect(() => {
 		const currentPhrase = typingPhrases[phraseIndex];
@@ -637,6 +638,7 @@ export default function Home() {
 		return () => window.clearTimeout(timer);
 	}, [isDeleting, phraseIndex, typedText]);
 
+	// Handle body overflow and escape key
 	useEffect(() => {
 		if (!selectedDetailEntry) {
 			document.body.style.overflow = "";
@@ -656,6 +658,20 @@ export default function Home() {
 			document.body.style.overflow = "";
 			window.removeEventListener("keydown", handleEscape);
 		};
+	}, [selectedDetailEntry]);
+
+	// Handle modal animation visibility separately
+	useEffect(() => {
+		if (selectedDetailEntry) {
+			// Trigger modal animation after a small delay
+			const timer = setTimeout(() => {
+				setModalVisible(true);
+			}, 10);
+			return () => clearTimeout(timer);
+		} else {
+			// Use setTimeout to avoid synchronous setState warning
+			setTimeout(() => setModalVisible(false), 0);
+		}
 	}, [selectedDetailEntry]);
 
 	return (
@@ -732,12 +748,32 @@ export default function Home() {
 						<div className="flex flex-col gap-3 sm:flex-row">
 							<a
 								href="#projects"
+								onClick={(e) => {
+									e.preventDefault();
+									const element =
+										document.querySelector("#projects");
+									if (element) {
+										element.scrollIntoView({
+											behavior: "smooth",
+										});
+									}
+								}}
 								className="inline-flex items-center justify-center rounded-full border-3 border-cyan-300 bg-cyan-300 px-6 py-2.5 text-xs font-black uppercase tracking-[0.22em] text-slate-950 transition-transform duration-200 hover:-translate-y-1"
 							>
 								View Projects
 							</a>
 							<a
 								href="#contact"
+								onClick={(e) => {
+									e.preventDefault();
+									const element =
+										document.querySelector("#contact");
+									if (element) {
+										element.scrollIntoView({
+											behavior: "smooth",
+										});
+									}
+								}}
 								className="inline-flex items-center justify-center rounded-full border-3 border-fuchsia-400 bg-fuchsia-400/10 px-6 py-2.5 text-xs font-black uppercase tracking-[0.22em] text-fuchsia-100 transition-transform duration-200 hover:-translate-y-1"
 							>
 								Let&apos;s Talk
@@ -1105,7 +1141,7 @@ export default function Home() {
 										onClick={() =>
 											setSelectedDetailEntry(project)
 										}
-										className="inline-flex items-center justify-center rounded-full border-3 border-fuchsia-400 bg-fuchsia-400/10 px-4 py-2 text-[11px] font-black uppercase tracking-[0.22em] text-fuchsia-100 transition-transform duration-200 hover:-translate-y-1"
+										className="inline-flex items-center justify-center rounded-full border-3 border-fuchsia-400 bg-fuchsia-400/10 px-4 py-2 text-[11px] font-black uppercase tracking-[0.22em] text-fuchsia-100 transition-transform duration-200 hover:-translate-y-1 cursor-pointer"
 									>
 										View Details
 									</button>
@@ -1214,7 +1250,7 @@ export default function Home() {
 					<dialog
 						open
 						aria-labelledby="detail-modal-title"
-						className="relative z-10 w-full max-w-4xl rounded-[24px] border-3 border-cyan-300 bg-[#050816] shadow-[10px_10px_0_rgba(244,114,182,0.42)]"
+						className={`relative z-10 w-full max-w-4xl rounded-[24px] border-3 border-cyan-300 bg-[#050816] shadow-[10px_10px_0_rgba(244,114,182,0.42)] modal-fade-in-up ${modalVisible ? "modal-visible" : ""}`}
 					>
 						<div className="flex items-center justify-between border-b-3 border-fuchsia-400 bg-[#170628] px-5 py-3">
 							<div>
@@ -1264,9 +1300,9 @@ export default function Home() {
 							</p>
 
 							<div className="flex flex-wrap gap-2">
-								{selectedDetailEntry.tags.map((tag) => (
+								{selectedDetailEntry.tags.map((tag, index) => (
 									<span
-										key={tag}
+										key={index}
 										className="rounded-full border-2 border-lime-300/45 bg-lime-300/10 px-3 py-1.5 font-mono text-[11px] uppercase tracking-[0.18em] text-zinc-100"
 									>
 										{tag}

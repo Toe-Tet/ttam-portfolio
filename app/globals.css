@@ -1,5 +1,9 @@
 @import "tailwindcss";
 
+html {
+  scroll-behavior: smooth;
+}
+
 :root {
   --background: #ffffff;
   --foreground: #171717;
@@ -71,6 +75,17 @@ body {
 }
 
 .fade-in-up.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.modal-fade-in-up {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.4s ease-out, transform 0.4s ease-out;
+}
+
+.modal-fade-in-up.modal-visible {
   opacity: 1;
   transform: translateY(0);
 }
