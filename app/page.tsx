@@ -1093,7 +1093,7 @@ export default function Home() {
 							Projects
 						</p>
 						<h2 className="max-w-4xl text-2xl font-black uppercase leading-tight text-white sm:text-3xl lg:text-4xl">
-							Selected projects with measurable impact..
+							Selected projects with measurable impact.
 						</h2>
 					</div>
 					<p className="max-w-xl font-mono text-xs uppercase tracking-[0.28em] text-zinc-400">
