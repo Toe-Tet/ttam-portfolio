@@ -34,6 +34,8 @@
 │   ├── globals.css
 │   ├── layout.tsx
 │   └── page.tsx
+├── components/
+│   └── AsciiArt.tsx
 ├── public/
 ├── AGENTS.md
 ├── CLAUDE.md
@@ -97,5 +99,6 @@
 - `app/page.tsx`: Main single-page content
 - `app/layout.tsx`: Root layout
 - `app/globals.css`: Global styles with Tailwind imports and theme
+- `components/AsciiArt.tsx`: Custom ASCII art image converter component
 - `SPEC.md`: Current product and UI specification for the portfolio
-  <!-- END:project-guidelines -->
+    <!-- END:project-guidelines -->

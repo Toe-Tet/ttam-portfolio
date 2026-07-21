@@ -3,6 +3,16 @@
 import { useEffect, useState, useRef } from "react";
 import Image from "next/image";
 import AsciiArt from "@/components/AsciiArt";
+import {
+	Zap,
+	Braces,
+	Database,
+	Code2,
+	Layers,
+	Atom,
+	Cloud,
+	Package,
+} from "lucide-react";
 
 function useFadeInUp(delay: number = 0) {
 	const ref = useRef<HTMLElement>(null);
@@ -90,10 +100,20 @@ const stats = [
 ];
 
 const floatingBadges = [
-	{ text: "API", top: "12%", left: "7%", delay: "0s" },
-	{ text: "TS", top: "20%", right: "10%", delay: "1.1s" },
-	{ text: "SQL", bottom: "25%", left: "8%", delay: "2.2s" },
-	{ text: "JS", bottom: "18%", right: "12%", delay: "0.7s" },
+	{ text: "API", top: "12%", left: "7%", delay: "0s", icon: Zap },
+	{ text: "TS", top: "20%", right: "10%", delay: "1.1s", icon: Braces },
+	{ text: "SQL", bottom: "25%", left: "8%", delay: "2.2s", icon: Database },
+	{ text: "JS", bottom: "18%", right: "12%", delay: "0.7s", icon: Code2 },
+	{ text: "NestJS", top: "35%", left: "5%", delay: "1.6s", icon: Layers },
+	{ text: "React", top: "40%", right: "8%", delay: "2.8s", icon: Atom },
+	{ text: "AWS", bottom: "10%", left: "15%", delay: "3.3s", icon: Cloud },
+	{
+		text: "Docker",
+		bottom: "5%",
+		right: "10%",
+		delay: "3.8s",
+		icon: Package,
+	},
 ];
 
 const terminalLines = [
@@ -702,7 +722,7 @@ export default function Home() {
 			{floatingBadges.map((badge) => (
 				<span
 					key={badge.text}
-					className="retro-float pointer-events-none absolute hidden rounded-full border-2 border-cyan-300/40 bg-black/35 px-4 py-1 font-mono text-xs tracking-[0.35em] text-cyan-200 shadow-[4px_4px_0_rgba(236,72,153,0.45)] md:block"
+					className="retro-float pointer-events-none absolute hidden items-center gap-2 rounded-full border-2 border-cyan-300/40 bg-black/35 px-4 py-1.5 font-mono text-xs tracking-[0.35em] text-cyan-200 shadow-[4px_4px_0_rgba(236,72,153,0.45)] md:inline-flex"
 					style={{
 						top: badge.top,
 						right: badge.right,
@@ -711,7 +731,8 @@ export default function Home() {
 						animationDelay: badge.delay,
 					}}
 				>
-					{badge.text}
+					<badge.icon className="h-3.5 w-3.5" />
+					{/* {badge.text} */}
 				</span>
 			))}
 

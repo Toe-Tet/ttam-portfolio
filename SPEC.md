@@ -10,18 +10,15 @@
 
 ## Current Stage
 
-The project is in the early implementation stage. The main page has moved beyond the default Next.js starter and now includes:
+The project is in a complete implementation stage. The main page has moved beyond the default Next.js starter and now includes:
 
 - A custom Hero section with typing animation
-- A custom About section with retro terminal styling
+- A custom About section with retro terminal styling and ASCII art profile image
 - A compact Skills section with grouped stack categories
 - A Work Experience section with an alternating timeline layout
 - A separate Projects section with case-study cards
-- Shared retro visual language across the implemented sections
-
-The following sections are still planned but not yet implemented:
-
-- Contact
+- A Contact section with email, phone, and resume links
+- Shared retro visual language across all sections
 
 ## Page Architecture
 
@@ -44,14 +41,14 @@ Current sections:
         - Experience, focus, and stack summary
         - Mission summary
 2. `#about`
-    - Retro terminal/CLI inspired About section
+    - Retro terminal/CLI inspired About section in a single cohesive container
     - Left side:
-        - Terminal window framing
+        - Terminal window framing with title bar
         - Prompt-style lines summarizing engineering focus
         - Main professional summary paragraph
     - Right side:
-        - Highlight cards for backend systems, SaaS platforms, and execution
-        - Core themes card
+        - ASCII art profile image (converted from /profile-image.jpeg using custom AsciiArt component
+        - Ascii art maintains retro terminal aesthetic
 3. `#skills`
     - Compact retro skills grid
     - Section heading focused on production-ready stack breadth
@@ -68,6 +65,11 @@ Current sections:
     - Compact summary cards for selected project work
     - Shared modal-based long-form detail viewer
     - Supports close button, overlay click, and Escape key
+6. `#contact`
+    - Contact section with retro styling
+    - Left side: Introduction text and primary CTAs (Send Email, Open LinkedIn)
+    - Right side: Contact action cards (Email, Phone, Resume)
+    - All links use appropriate target and rel attributes
 
 ## Current Content Model
 
@@ -166,6 +168,19 @@ Current sections:
     - Technology tags
     - Highlight blocks for architecture, security, performance, testing, analytics, operations, or delivery
 
+### Contact
+
+- Contact actions:
+    - `Email`: `toetet248@gmail.com`
+    - `Phone`: `959 458021097`
+    - `Resume`: View Resume (Google Drive link)
+- Primary CTAs:
+    - `Send Email` (mailto)
+    - `Open LinkedIn` (external link)
+- Presentation:
+    - Contact action cards have distinct retro styling with neon accents
+    - All external links open in new tab with noreferrer
+
 ## Visual Specification
 
 ### Shared Design Direction
@@ -211,7 +226,7 @@ Current sections:
 
 - `app/page.tsx`
     - Main single-page implementation
-    - Hero, About, Skills, Work Experience, and Projects content/layout
+    - Hero, About, Skills, Work Experience, Projects, and Contact content/layout
     - Typing animation logic
     - Work and project experience data structures
     - Modal state and interactions for detailed experience content
@@ -222,6 +237,10 @@ Current sections:
 - `app/layout.tsx`
     - Root layout
     - Font setup
+- `components/AsciiArt.tsx`
+    - Custom React component that converts images to ASCII art using Canvas API
+    - Automatically adjusts height based on image aspect ratio, accounting for text character proportions (~2x taller than wide)
+    - Used in About section for profile image
 - `AGENTS.md`
     - Project operating rules and implementation conventions
 
@@ -239,11 +258,10 @@ Current sections:
 
 ## Next Recommended Work
 
-1. Add a Contact section and wire the Hero CTA to it
-2. Add additional past companies and projects to the existing Work Experience and Projects data model
-3. Replace placeholder or abbreviated stack labels with final preferred wording
-4. Add production portfolio metadata in `app/layout.tsx`
-5. Decide whether project filtering or grouping by company is needed as more entries are added
+1. Add additional past companies and projects to the existing Work Experience and Projects data model
+2. Replace placeholder or abbreviated stack labels with final preferred wording
+3. Add production portfolio metadata in `app/layout.tsx`
+4. Decide whether project filtering or grouping by company is needed as more entries are added
 
 ## Notes
 
