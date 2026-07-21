@@ -722,7 +722,7 @@ export default function Home() {
 			{floatingBadges.map((badge) => (
 				<span
 					key={badge.text}
-					className="retro-float pointer-events-none absolute hidden items-center gap-2 rounded-full border-2 border-cyan-300/40 bg-black/35 px-4 py-1.5 font-mono text-xs tracking-[0.35em] text-cyan-200 shadow-[4px_4px_0_rgba(236,72,153,0.45)] md:inline-flex"
+					className="retro-float pointer-events-none absolute items-center gap-2 rounded-full border-2 border-cyan-300/40 bg-black/35 px-4 py-1.5 font-mono text-xs tracking-[0.35em] text-cyan-200 shadow-[4px_4px_0_rgba(236,72,153,0.45)] md:inline-flex"
 					style={{
 						top: badge.top,
 						right: badge.right,
@@ -884,8 +884,8 @@ export default function Home() {
 					</p> */}
 				</div>
 
-				<div className="rounded-[18px] border-2 border-cyan-300/45 bg-slate-950 shadow-[8px_8px_0_rgba(244,114,182,0.18)]">
-					<div className="rounded-t-[16px] flex items-center justify-between border-2 border-cyan-300/45 bg-slate-950 px-4 py-2.5">
+				<div className="rounded-[18px] bg-slate-950/75 border-2 border-cyan-300/45 shadow-[8px_8px_0_rgba(244,114,182,0.18)]">
+					<div className="rounded-t-[16px] flex items-center justify-between border-2 border-cyan-300/45 px-4 py-2.5">
 						<div className="flex items-center gap-2">
 							<span className="h-2.5 w-2.5 rounded-full bg-red-400" />
 							<span className="h-2.5 w-2.5 rounded-full bg-yellow-300" />
