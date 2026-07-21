@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState, useRef } from "react";
-import Image from "next/image";
 import AsciiArt from "@/components/AsciiArt";
 import {
 	Zap,
@@ -12,20 +11,27 @@ import {
 	Atom,
 	Cloud,
 	Package,
+	ExternalLink,
 } from "lucide-react";
 
-function useFadeInUp(delay: number = 0) {
+function useFadeInUp(delay: number = 0, isLoadingDone: boolean = true) {
 	const ref = useRef<HTMLElement>(null);
 	const [isVisible, setIsVisible] = useState(false);
 
 	useEffect(() => {
+		if (!isLoadingDone) return;
+
+		let timeoutId: NodeJS.Timeout | null = null;
+
 		const observer = new IntersectionObserver(
 			([entry]) => {
 				if (entry.isIntersecting) {
-					setTimeout(() => {
+					timeoutId = setTimeout(() => {
 						setIsVisible(true);
 					}, delay);
-					observer.unobserve(entry.target);
+				} else {
+					if (timeoutId) clearTimeout(timeoutId);
+					setIsVisible(false);
 				}
 			},
 			{ threshold: 0.1 },
@@ -33,14 +39,24 @@ function useFadeInUp(delay: number = 0) {
 
 		if (ref.current) {
 			observer.observe(ref.current);
+			// Check if already intersecting on mount
+			const isIntersecting = observer
+				.takeRecords()
+				.some((record) => record.isIntersecting);
+			if (isIntersecting) {
+				timeoutId = setTimeout(() => {
+					setIsVisible(true);
+				}, delay);
+			}
 		}
 
 		return () => {
+			if (timeoutId) clearTimeout(timeoutId);
 			if (ref.current) {
 				observer.unobserve(ref.current);
 			}
 		};
-	}, [delay]);
+	}, [delay, isLoadingDone]);
 
 	return { ref, isVisible };
 }
@@ -48,17 +64,169 @@ function useFadeInUp(delay: number = 0) {
 function FadeInUp({
 	children,
 	delay = 0,
+	isLoadingDone = true,
 	className = "",
 }: Readonly<{
 	children: React.ReactNode;
 	delay?: number;
+	isLoadingDone?: boolean;
 	className?: string;
 }>) {
-	const { ref, isVisible } = useFadeInUp(delay);
+	const { ref, isVisible } = useFadeInUp(delay, isLoadingDone);
 	return (
 		<div
 			ref={ref as React.RefObject<HTMLDivElement>}
 			className={`fade-in-up ${isVisible ? "visible" : ""} ${className}`}
+		>
+			{children}
+		</div>
+	);
+}
+
+function useFadeInLeft(delay: number = 0, isLoadingDone: boolean = true) {
+	const ref = useRef<HTMLElement>(null);
+	const [isVisible, setIsVisible] = useState(false);
+
+	useEffect(() => {
+		console.log("useFadeInLeft useEffect running", {
+			isLoadingDone,
+			ref: ref.current,
+		});
+		if (!isLoadingDone) return;
+
+		let timeoutId: NodeJS.Timeout | null = null;
+
+		const observer = new IntersectionObserver(
+			([entry]) => {
+				console.log("useFadeInLeft intersection observer", {
+					isIntersecting: entry.isIntersecting,
+				});
+				if (entry.isIntersecting) {
+					timeoutId = setTimeout(() => {
+						setIsVisible(true);
+					}, delay);
+				} else {
+					if (timeoutId) clearTimeout(timeoutId);
+					setIsVisible(false);
+				}
+			},
+			{ threshold: 0.1 },
+		);
+
+		if (ref.current) {
+			console.log("useFadeInLeft observing ref");
+			observer.observe(ref.current);
+			// Check if already intersecting on mount
+			const records = observer.takeRecords();
+			console.log("useFadeInLeft takeRecords", records);
+			const isIntersecting = records.some(
+				(record) => record.isIntersecting,
+			);
+			if (isIntersecting) {
+				console.log("useFadeInLeft already intersecting");
+				timeoutId = setTimeout(() => {
+					setIsVisible(true);
+				}, delay);
+			}
+		}
+
+		return () => {
+			if (timeoutId) clearTimeout(timeoutId);
+			if (ref.current) {
+				observer.unobserve(ref.current);
+			}
+		};
+	}, [delay, isLoadingDone]);
+
+	console.log("useFadeInLeft returning", { isVisible });
+	return { ref, isVisible };
+}
+
+function FadeInLeft({
+	children,
+	delay = 0,
+	isLoadingDone = true,
+	className = "",
+}: Readonly<{
+	children: React.ReactNode;
+	delay?: number;
+	isLoadingDone?: boolean;
+	className?: string;
+}>) {
+	const { ref, isVisible } = useFadeInLeft(delay, isLoadingDone);
+	return (
+		<div
+			ref={ref as React.RefObject<HTMLDivElement>}
+			className={`fade-in-left ${isVisible ? "visible" : ""} ${className}`}
+		>
+			{children}
+		</div>
+	);
+}
+
+function useFadeInRight(delay: number = 0, isLoadingDone: boolean = true) {
+	const ref = useRef<HTMLElement>(null);
+	const [isVisible, setIsVisible] = useState(false);
+
+	useEffect(() => {
+		if (!isLoadingDone) return;
+
+		let timeoutId: NodeJS.Timeout | null = null;
+
+		const observer = new IntersectionObserver(
+			([entry]) => {
+				if (entry.isIntersecting) {
+					timeoutId = setTimeout(() => {
+						setIsVisible(true);
+					}, delay);
+				} else {
+					if (timeoutId) clearTimeout(timeoutId);
+					setIsVisible(false);
+				}
+			},
+			{ threshold: 0.1 },
+		);
+
+		if (ref.current) {
+			observer.observe(ref.current);
+			// Check if already intersecting on mount
+			const isIntersecting = observer
+				.takeRecords()
+				.some((record) => record.isIntersecting);
+			if (isIntersecting) {
+				timeoutId = setTimeout(() => {
+					setIsVisible(true);
+				}, delay);
+			}
+		}
+
+		return () => {
+			if (timeoutId) clearTimeout(timeoutId);
+			if (ref.current) {
+				observer.unobserve(ref.current);
+			}
+		};
+	}, [delay, isLoadingDone]);
+
+	return { ref, isVisible };
+}
+
+function FadeInRight({
+	children,
+	delay = 0,
+	isLoadingDone = true,
+	className = "",
+}: Readonly<{
+	children: React.ReactNode;
+	delay?: number;
+	isLoadingDone?: boolean;
+	className?: string;
+}>) {
+	const { ref, isVisible } = useFadeInRight(delay, isLoadingDone);
+	return (
+		<div
+			ref={ref as React.RefObject<HTMLDivElement>}
+			className={`fade-in-right ${isVisible ? "visible" : ""} ${className}`}
 		>
 			{children}
 		</div>
@@ -634,12 +802,58 @@ function WorkTimelineCard({
 }
 
 export default function Home() {
+	const [isLoading, setIsLoading] = useState(true);
+	const [progress, setProgress] = useState(0);
+	const [installText, setInstallText] = useState("");
 	const [phraseIndex, setPhraseIndex] = useState(0);
 	const [typedText, setTypedText] = useState("");
 	const [isDeleting, setIsDeleting] = useState(false);
 	const [selectedDetailEntry, setSelectedDetailEntry] =
 		useState<ExperienceEntry | null>(null);
 	const [modalVisible, setModalVisible] = useState(false);
+	const [scrollProgress, setScrollProgress] = useState(0);
+
+	// Loading screen animation
+	useEffect(() => {
+		const installSteps = [
+			"Installing dependencies...",
+			"Initializing components...",
+			"Setting up animations...",
+			"Loading assets...",
+			"Starting server...",
+			"Ready!",
+		];
+
+		let currentStep = 0;
+		let currentProgress = 0;
+		const displayedSteps: string[] = [];
+
+		const progressInterval = setInterval(() => {
+			currentProgress += 1;
+			setProgress(currentProgress);
+
+			if (currentProgress >= 100) {
+				clearInterval(progressInterval);
+				setTimeout(() => setIsLoading(false), 300);
+			}
+		}, 20);
+
+		// Add each step one by one
+		const addNextStep = () => {
+			if (currentStep < installSteps.length) {
+				displayedSteps.push(installSteps[currentStep]);
+				setInstallText(displayedSteps.join("\n"));
+				currentStep++;
+				setTimeout(addNextStep, 400);
+			}
+		};
+
+		addNextStep();
+
+		return () => {
+			clearInterval(progressInterval);
+		};
+	}, []);
 
 	useEffect(() => {
 		const currentPhrase = typingPhrases[phraseIndex];
@@ -649,7 +863,7 @@ export default function Home() {
 		let timeout = 90;
 
 		if (!isDeleting && hasFinishedTyping) {
-			timeout = 1500;
+			timeout = 1000;
 		} else if (isDeleting) {
 			timeout = 45;
 		}
@@ -714,237 +928,367 @@ export default function Home() {
 		}
 	}, [selectedDetailEntry]);
 
+	// Handle scroll progress bar
+	useEffect(() => {
+		const handleScroll = () => {
+			const scrollTop =
+				window.scrollY || document.documentElement.scrollTop;
+			const scrollHeight =
+				document.documentElement.scrollHeight -
+				document.documentElement.clientHeight;
+			const progress =
+				scrollHeight > 0 ? (scrollTop / scrollHeight) * 100 : 0;
+			setScrollProgress(progress);
+		};
+
+		window.addEventListener("scroll", handleScroll);
+		return () => window.removeEventListener("scroll", handleScroll);
+	}, []);
+
 	return (
-		<main className="relative flex min-h-screen flex-col overflow-hidden bg-[radial-gradient(circle_at_top,rgba(34,211,238,0.24),transparent_28%),linear-gradient(180deg,#13001f_0%,#0b1022_50%,#04070f_100%)] text-zinc-50">
-			<div className="pointer-events-none absolute inset-0 bg-[linear-gradient(rgba(34,211,238,0.14)_1px,transparent_1px),linear-gradient(90deg,rgba(244,114,182,0.12)_1px,transparent_1px)] bg-size-[44px_44px]" />
-			<div className="pointer-events-none absolute inset-0 retro-scanlines opacity-30" />
-
-			{floatingBadges.map((badge) => (
-				<span
-					key={badge.text}
-					className="retro-float pointer-events-none absolute items-center gap-2 rounded-full border-2 border-cyan-300/40 bg-black/35 px-4 py-1.5 font-mono text-xs tracking-[0.35em] text-cyan-200 shadow-[4px_4px_0_rgba(236,72,153,0.45)] md:inline-flex"
-					style={{
-						top: badge.top,
-						right: badge.right,
-						bottom: badge.bottom,
-						left: badge.left,
-						animationDelay: badge.delay,
-					}}
-				>
-					<badge.icon className="h-3.5 w-3.5" />
-					{/* {badge.text} */}
-				</span>
-			))}
-
-			<section
-				id="home"
-				className="relative z-10 mx-auto flex min-h-[82vh] w-full max-w-7xl flex-col justify-center px-6 py-14 sm:px-10 lg:px-16 lg:py-16"
+		<>
+			{/* Loading Screen */}
+			<div
+				className={`fixed inset-0 z-[60] flex items-center justify-center bg-[#04070f] p-6 transition-all duration-1000 ${
+					isLoading
+						? "opacity-100 pointer-events-auto"
+						: "opacity-0 pointer-events-none"
+				}`}
 			>
-				<div className="grid items-center gap-6 lg:grid-cols-[minmax(0,1.2fr)_360px]">
-					<div className="space-y-6">
-						<div className="inline-flex items-center gap-2 rounded-full border-2 border-fuchsia-400 bg-fuchsia-400/10 px-3 py-1.5 font-mono text-[11px] uppercase tracking-[0.3em] text-fuchsia-200 shadow-[4px_4px_0_rgba(34,211,238,0.38)]">
-							<span className="h-2.5 w-2.5 rounded-full bg-lime-300" />
-							<span>Available For Impactful Builds</span>
-						</div>
-
-						<div className="space-y-4">
-							<p className="font-mono text-xs uppercase tracking-[0.38em] text-cyan-300 sm:text-sm">
-								Toe Tet Aung Myint / Senior Software Engineer
-							</p>
-
-							<h1 className="flex max-w-3xl flex-wrap gap-1 text-3xl font-black uppercase leading-tight tracking-tight text-white sm:text-4xl lg:text-5xl">
-								<span className="text-cyan-300">Building</span>
-								<span className="text-white">
-									reliable digital systems
-								</span>
-								{/* <span className="text-lime-300">
-									with retro energy.
-								</span> */}
-							</h1>
-
-							<div className="max-w-2xl rounded-[22px] border-2 border-cyan-300 bg-slate-950/85 p-4 shadow-[6px_6px_0_rgba(244,114,182,0.6)]">
-								<p className="font-mono text-[11px] uppercase tracking-[0.32em] text-cyan-300">
-									Current Focus
-								</p>
-								<p
-									className="mt-2 min-h-8 font-mono text-xl font-semibold leading-snug text-lime-300 sm:min-h-12 sm:text-2xl"
-									aria-live="polite"
-								>
-									{typedText}
-									<span
-										className="retro-cursor ml-1 inline-block h-[1em] w-2.5 translate-y-1 bg-fuchsia-400"
-										aria-hidden="true"
-									/>
-								</p>
-							</div>
-
-							{/* <p className="max-w-2xl text-base leading-8 text-zinc-200 sm:text-lg">
-								I design and ship scalable backend platforms,
-								performance-focused web experiences, and
-								cloud-ready products that help teams move faster
-								without sacrificing maintainability.
-							</p> */}
-						</div>
-
-						<div className="flex flex-col gap-3 sm:flex-row">
-							<a
-								href="#projects"
-								onClick={(e) => {
-									e.preventDefault();
-									const element =
-										document.querySelector("#projects");
-									if (element) {
-										element.scrollIntoView({
-											behavior: "smooth",
-										});
-									}
-								}}
-								className="inline-flex items-center justify-center rounded-full border-2 border-cyan-300 bg-cyan-300 px-6 py-2.5 text-xs font-black uppercase tracking-[0.22em] text-slate-950 transition-transform duration-200 hover:-translate-y-1"
-							>
-								View Projects
-							</a>
-							<a
-								href="#contact"
-								onClick={(e) => {
-									e.preventDefault();
-									const element =
-										document.querySelector("#contact");
-									if (element) {
-										element.scrollIntoView({
-											behavior: "smooth",
-										});
-									}
-								}}
-								className="inline-flex items-center justify-center rounded-full border-2 border-fuchsia-400 bg-fuchsia-400/10 px-6 py-2.5 text-xs font-black uppercase tracking-[0.22em] text-fuchsia-100 transition-transform duration-200 hover:-translate-y-1"
-							>
-								Let&apos;s Talk
-							</a>
-						</div>
-					</div>
-
-					{/* <div className="rounded-[22px] border-2 border-lime-300 bg-slate-950/85 p-3 shadow-[6px_6px_0_rgba(34,211,238,0.45)]"> */}
-					<div className="rounded-[16px] mt-10 border-2 border-fuchsia-400 bg-[#19062a] p-4 shadow-[6px_6px_0_rgba(34,211,238,0.45)]">
-						<div className="mb-4 flex items-center justify-between border-b-2 border-dashed border-fuchsia-300/60 pb-3 font-mono text-[11px] uppercase tracking-[0.3em] text-fuchsia-200">
-							<span>TTAM.EXE</span>
-							<span>ONLINE</span>
-						</div>
-
-						<div className="space-y-3 font-mono">
-							<p className="text-xs uppercase tracking-[0.28em] text-cyan-300">
-								Status Board
-							</p>
-							<div className="space-y-2.5">
-								{stats.map((stat) => (
-									<div
-										key={stat.label}
-										className="flex items-center justify-between rounded-2xl border border-cyan-300/50 bg-black/30 px-3 py-3"
-									>
-										<span className="text-xs uppercase tracking-[0.24em] text-zinc-300">
-											{stat.label}
-										</span>
-										<span className="block text-right text-sm font-bold uppercase tracking-[0.16em] text-lime-300">
-											{stat.value}
-										</span>
-									</div>
-								))}
-							</div>
-
-							<div className="rounded-2xl border border-fuchsia-400/60 bg-fuchsia-400/10 p-3">
-								<p className="text-[11px] uppercase tracking-[0.3em] text-fuchsia-200">
-									Mission
-								</p>
-								<p className="mt-2 text-sm leading-6 text-zinc-100">
-									Transforming complex business requirements
-									into scalable architecture, resilient
-									systems, and production-ready software.
-								</p>
-							</div>
-						</div>
-					</div>
-					{/* </div> */}
-				</div>
-			</section>
-
-			<section
-				id="about"
-				className="relative z-10 mx-auto w-full max-w-7xl px-6 pb-24 sm:px-10 lg:px-16 lg:pb-32"
-			>
-				<div className="mb-8 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
-					<div className="space-y-3">
-						<p className="font-mono text-sm uppercase tracking-[0.45em] text-fuchsia-200">
-							About Me
-						</p>
-						<h2 className="max-w-3xl text-2xl font-black uppercase leading-tight text-white sm:text-3xl lg:text-4xl">
-							From business needs to resilient production systems.
-						</h2>
-					</div>
-					{/* <p className="max-w-xl text-base leading-8 text-zinc-300">
-						A short terminal-style snapshot of how I approach
-						software, teams, and long-term maintainability.
-					</p> */}
-				</div>
-
-				<div className="rounded-[18px] bg-slate-950/75 border-2 border-cyan-300/45 shadow-[8px_8px_0_rgba(244,114,182,0.18)]">
-					<div className="rounded-t-[16px] flex items-center justify-between border-2 border-cyan-300/45 px-4 py-2.5">
+				<div className="w-full max-w-2xl">
+					<div className=" flex items-center gap-2 rounded-t-[22px] border-2 border-cyan-300 bg-slate-950/85 p-4">
 						<div className="flex items-center gap-2">
 							<span className="h-2.5 w-2.5 rounded-full bg-red-400" />
 							<span className="h-2.5 w-2.5 rounded-full bg-yellow-300" />
 							<span className="h-2.5 w-2.5 rounded-full bg-lime-300" />
 						</div>
 						<p className="font-mono text-[11px] uppercase tracking-[0.3em] text-fuchsia-200">
-							about.exe
+							ttam-portfolio.exe
 						</p>
 					</div>
 
-					<div className="grid gap-6 p-4 sm:p-5 lg:grid-cols-[minmax(0,1.15fr)_minmax(200px,0.85fr)]">
-						{/* Terminal Text */}
-						<div className="font-mono text-xs leading-7 text-zinc-100 sm:text-xs">
-							<div className="space-y-2.5">
-								{terminalLines.map((line, index) => (
-									<p key={`${line}-${index}`}>
-										{line.startsWith(">") ? (
-											<>
-												<span className="text-cyan-300">
-													C:\TTAM&gt;
-												</span>{" "}
-												<span>{line.slice(2)}</span>
-											</>
-										) : (
-											line
-										)}
-									</p>
-								))}
-							</div>
+					<div className="rounded-b-[22px] border-2 border-cyan-300 bg-slate-950/85 p-6 flex flex-col">
+						<div className="space-y-2 mb-4">
+							<p className="font-mono text-sm text-cyan-300">
+								Welcome to Toe Tet Aung Myint&apos;s Portfolio
+							</p>
 						</div>
 
-						{/* ASCII Art */}
-						<div className="flex items-center justify-center">
-							<div className="rounded-[18px] overflow-hidden ">
-								<AsciiArt
-									src="/profile-image.jpeg"
-									width={50}
-									fontSize={10}
+						{/* Install Text */}
+						<div className="flex-1 min-h-[200px] space-y-1 mb-4">
+							{installText.split("\n").map((line, index) => (
+								<div
+									key={index}
+									className="flex items-center gap-2"
+								>
+									{index === 0 && (
+										<span className="font-mono text-cyan-300">
+											$
+										</span>
+									)}
+									{index > 0 && (
+										<span className="font-mono text-cyan-300 opacity-0">
+											$
+										</span>
+									)}
+									<p className="font-mono text-sm text-lime-300">
+										{line}
+									</p>
+									{index ===
+										installText.split("\n").length - 1 && (
+										<span className="ml-1 inline-block h-[1em] w-2.5 bg-lime-300 animate-pulse shrink-0" />
+									)}
+								</div>
+							))}
+						</div>
+
+						{/* Progress Bar */}
+						<div className="mt-auto pt-4 border-t border-cyan-300/20">
+							<div className="flex items-center justify-between mb-2">
+								<p className="font-mono text-xs uppercase tracking-[0.22em] text-zinc-400">
+									Installation Progress
+								</p>
+								<p className="font-mono text-xs uppercase tracking-[0.22em] text-cyan-300">
+									{progress}%
+								</p>
+							</div>
+							<div className="h-2 w-full rounded-full border border-cyan-300 bg-black/30 overflow-hidden">
+								<div
+									className="h-full bg-gradient-to-r from-cyan-100 via-cyan-300 to-lime-300 transition-all duration-50"
+									style={{ width: `${progress}%` }}
 								/>
 							</div>
 						</div>
 					</div>
 				</div>
-			</section>
+			</div>
 
-			<section
-				id="skills"
-				className="relative z-10 mx-auto w-full max-w-7xl px-6 pb-24 sm:px-10 lg:px-16 lg:pb-32"
+			{/* Main Content */}
+			<main
+				className={`relative flex min-h-screen flex-col overflow-hidden text-zinc-50 transition-opacity duration-1000 ${
+					!isLoading ? "opacity-100" : "opacity-0"
+				}`}
 			>
-				<div className="mb-8 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
-					<div className="space-y-3">
-						<p className="font-mono text-sm uppercase tracking-[0.45em] text-cyan-300">
-							Skills
-						</p>
-						<h2 className="max-w-3xl text-2xl font-black uppercase leading-tight text-white sm:text-3xl lg:text-4xl">
-							A production-ready stack across platform layers.
-						</h2>
+				{/* Scroll Progress Bar */}
+				<div className="fixed top-0 left-0 z-50 h-1 w-full bg-black/50">
+					<div
+						className="h-full bg-gradient-to-r from-cyan-100 via-cyan-300 to-cyan-500 transition-all duration-150 ease-out"
+						style={{ width: `${scrollProgress}%` }}
+					/>
+				</div>
+				{/* <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(rgba(34,211,238,0.14)_1px,transparent_1px),linear-gradient(90deg,rgba(244,114,182,0.12)_1px,transparent_1px)] bg-size-[44px_44px]" /> */}
+				<div className="pointer-events-none absolute inset-0 retro-scanlines opacity-30" />
+
+				{floatingBadges.map((badge) => (
+					<span
+						key={badge.text}
+						className="retro-float pointer-events-none absolute items-center gap-2 rounded-full border-2 border-cyan-300/40 bg-black/35 px-4 py-1.5 font-mono text-xs tracking-[0.35em] text-cyan-200 shadow-[4px_4px_0_rgba(236,72,153,0.45)] md:inline-flex"
+						style={{
+							top: badge.top,
+							right: badge.right,
+							bottom: badge.bottom,
+							left: badge.left,
+							animationDelay: badge.delay,
+						}}
+					>
+						<badge.icon className="h-3.5 w-3.5" />
+						{/* {badge.text} */}
+					</span>
+				))}
+
+				<section
+					id="home"
+					className="relative z-10 mx-auto flex min-h-[82vh] w-full max-w-7xl flex-col justify-center px-6 py-14 sm:px-10 lg:px-16 lg:py-16"
+				>
+					<div className="grid items-center gap-6 lg:grid-cols-[minmax(0,1.2fr)_360px]">
+						<FadeInLeft delay={400} isLoadingDone={!isLoading}>
+							<div className="space-y-6">
+								<div className="inline-flex items-center gap-2 rounded-full border-2 border-fuchsia-400 bg-fuchsia-400/10 px-3 py-1.5 font-mono text-[11px] uppercase tracking-[0.3em] text-fuchsia-200 shadow-[4px_4px_0_rgba(34,211,238,0.38)]">
+									<span className="h-2.5 w-2.5 rounded-full bg-lime-300" />
+									<span>Available For Impactful Builds</span>
+								</div>
+
+								<div className="space-y-4">
+									<p className="font-mono text-xs uppercase tracking-[0.38em] text-cyan-300 sm:text-sm">
+										Toe Tet Aung Myint / Senior Software
+										Engineer
+									</p>
+
+									<h1 className="flex max-w-3xl flex-wrap gap-1 text-3xl font-black uppercase leading-tight tracking-tight text-white sm:text-4xl lg:text-5xl">
+										<span className="text-cyan-300">
+											Building
+										</span>
+										<span className="text-white">
+											reliable digital systems
+										</span>
+										{/* <span className="text-lime-300">
+									with retro energy.
+								</span> */}
+									</h1>
+
+									<div className="max-w-2xl rounded-[22px] border-2 border-cyan-300 bg-slate-950/85 p-4 shadow-[6px_6px_0_rgba(244,114,182,0.6)]">
+										<p className="font-mono text-[11px] uppercase tracking-[0.32em] text-cyan-300">
+											Current Focus
+										</p>
+										<div
+											className="mt-2 flex h-12 items-start font-mono text-xl font-semibold leading-snug text-lime-300 sm:h-16 sm:text-2xl"
+											aria-live="polite"
+										>
+											<div className="min-w-0">
+												{typedText}
+											</div>
+											<span
+												className="retro-cursor ml-1 inline-block h-[1em] w-2.5 translate-y-1 bg-fuchsia-400 shrink-0"
+												aria-hidden="true"
+											/>
+										</div>
+									</div>
+
+									{/* <p className="max-w-2xl text-base leading-8 text-zinc-200 sm:text-lg">
+								I design and ship scalable backend platforms,
+								performance-focused web experiences, and
+								cloud-ready products that help teams move faster
+								without sacrificing maintainability.
+							</p> */}
+								</div>
+
+								<div className="flex flex-col gap-3 sm:flex-row">
+									<a
+										href="#projects"
+										onClick={(e) => {
+											e.preventDefault();
+											const element =
+												document.querySelector(
+													"#projects",
+												);
+											if (element) {
+												element.scrollIntoView({
+													behavior: "smooth",
+												});
+											}
+										}}
+										className="inline-flex items-center justify-center rounded-full border-2 border-cyan-300 bg-cyan-300 px-6 py-2.5 text-xs font-black uppercase tracking-[0.22em] text-slate-950 transition-transform duration-200 hover:-translate-y-1"
+									>
+										View Projects
+									</a>
+									<a
+										href="#contact"
+										onClick={(e) => {
+											e.preventDefault();
+											const element =
+												document.querySelector(
+													"#contact",
+												);
+											if (element) {
+												element.scrollIntoView({
+													behavior: "smooth",
+												});
+											}
+										}}
+										className="inline-flex items-center justify-center rounded-full border-2 border-fuchsia-400 bg-fuchsia-400/10 px-6 py-2.5 text-xs font-black uppercase tracking-[0.22em] text-fuchsia-100 transition-transform duration-200 hover:-translate-y-1"
+									>
+										Let&apos;s Talk
+									</a>
+								</div>
+							</div>
+						</FadeInLeft>
+
+						{/* <div className="rounded-[22px] border-2 border-lime-300 bg-slate-950/85 p-3 shadow-[6px_6px_0_rgba(34,211,238,0.45)]"> */}
+						<FadeInRight delay={400} isLoadingDone={!isLoading}>
+							<div className="rounded-[16px] mt-10 border-2 border-fuchsia-400 bg-[#19062a] p-4 shadow-[6px_6px_0_rgba(34,211,238,0.45)]">
+								<div className="mb-4 flex items-center justify-between border-b-2 border-dashed border-fuchsia-300/60 pb-3 font-mono text-[11px] uppercase tracking-[0.3em] text-fuchsia-200">
+									<span>TTAM.EXE</span>
+									<span>ONLINE</span>
+								</div>
+
+								<div className="space-y-3 font-mono">
+									<p className="text-xs uppercase tracking-[0.28em] text-cyan-300">
+										Status Board
+									</p>
+									<div className="space-y-2.5">
+										{stats.map((stat) => (
+											<div
+												key={stat.label}
+												className="flex items-center justify-between rounded-2xl border border-cyan-300/50 bg-black/30 px-3 py-3"
+											>
+												<span className="text-xs uppercase tracking-[0.24em] text-zinc-300">
+													{stat.label}
+												</span>
+												<span className="block text-right text-sm font-bold uppercase tracking-[0.16em] text-lime-300">
+													{stat.value}
+												</span>
+											</div>
+										))}
+									</div>
+
+									<div className="rounded-2xl border border-fuchsia-400/60 bg-fuchsia-400/10 p-3">
+										<p className="text-[11px] uppercase tracking-[0.3em] text-fuchsia-200">
+											Mission
+										</p>
+										<p className="mt-2 text-sm leading-6 text-zinc-100">
+											Transforming complex business
+											requirements into scalable
+											architecture, resilient systems, and
+											production-ready software.
+										</p>
+									</div>
+								</div>
+							</div>
+						</FadeInRight>
+						{/* </div> */}
 					</div>
-					{/* <div className="max-w-xl rounded-[18px] border-2 border-fuchsia-400 bg-fuchsia-400/10 px-4 py-3 shadow-[6px_6px_0_rgba(34,211,238,0.26)]">
+				</section>
+
+				<section
+					id="about"
+					className="relative z-10 mx-auto w-full max-w-7xl px-6 pb-24 sm:px-10 lg:px-16 lg:pb-32"
+				>
+					<div className="mb-8 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+						<div className="space-y-3">
+							<p className="font-mono text-sm uppercase tracking-[0.45em] text-fuchsia-200">
+								About Me
+							</p>
+							<FadeInUp>
+								<h2 className="max-w-3xl text-2xl font-black uppercase leading-tight text-white sm:text-3xl lg:text-4xl">
+									From business needs to resilient production
+									systems.
+								</h2>
+							</FadeInUp>
+						</div>
+						{/* <p className="max-w-xl text-base leading-8 text-zinc-300">
+						A short terminal-style snapshot of how I approach
+						software, teams, and long-term maintainability.
+					</p> */}
+					</div>
+
+					<FadeInUp>
+						<div className="rounded-[18px] bg-slate-950/75 border-2 border-cyan-300/45 shadow-[8px_8px_0_rgba(244,114,182,0.18)]">
+							<div className="rounded-t-[16px] flex items-center justify-between border-2 border-cyan-300/45 px-4 py-2.5">
+								<div className="flex items-center gap-2">
+									<span className="h-2.5 w-2.5 rounded-full bg-red-400" />
+									<span className="h-2.5 w-2.5 rounded-full bg-yellow-300" />
+									<span className="h-2.5 w-2.5 rounded-full bg-lime-300" />
+								</div>
+								<p className="font-mono text-[11px] uppercase tracking-[0.3em] text-fuchsia-200">
+									about.exe
+								</p>
+							</div>
+
+							<div className="grid gap-6 p-4 sm:p-5 lg:grid-cols-[minmax(0,1.15fr)_minmax(200px,0.85fr)]">
+								{/* Terminal Text */}
+								<div className="font-mono text-xs leading-7 text-zinc-100 sm:text-xs">
+									<div className="space-y-2.5">
+										{terminalLines.map((line, index) => (
+											<p key={`${line}-${index}`}>
+												{line.startsWith(">") ? (
+													<>
+														<span className="text-cyan-300">
+															C:\TTAM&gt;
+														</span>{" "}
+														<span>
+															{line.slice(2)}
+														</span>
+													</>
+												) : (
+													line
+												)}
+											</p>
+										))}
+									</div>
+								</div>
+
+								{/* ASCII Art */}
+								<div className="flex items-center justify-center">
+									<div className="rounded-[18px] overflow-hidden ">
+										<AsciiArt
+											src="/profile-image.jpeg"
+											width={50}
+											fontSize={10}
+										/>
+									</div>
+								</div>
+							</div>
+						</div>
+					</FadeInUp>
+				</section>
+
+				<section
+					id="skills"
+					className="relative z-10 mx-auto w-full max-w-7xl px-6 pb-24 sm:px-10 lg:px-16 lg:pb-32"
+				>
+					<div className="mb-8 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+						<div className="space-y-3">
+							<p className="font-mono text-sm uppercase tracking-[0.45em] text-cyan-300">
+								Skills
+							</p>
+							<FadeInUp>
+								<h2 className="max-w-3xl text-2xl font-black uppercase leading-tight text-white sm:text-3xl lg:text-4xl">
+									A production-ready stack across platform
+									layers.
+								</h2>
+							</FadeInUp>
+						</div>
+						{/* <div className="max-w-xl rounded-[18px] border-2 border-fuchsia-400 bg-fuchsia-400/10 px-4 py-3 shadow-[6px_6px_0_rgba(34,211,238,0.26)]">
 						<p className="font-mono text-[11px] uppercase tracking-[0.3em] text-fuchsia-100">
 							Loadout
 						</p>
@@ -954,377 +1298,393 @@ export default function Home() {
 							patterns that support maintainable growth.
 						</p>
 					</div> */}
-				</div>
+					</div>
 
-				<div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-					{skillGroups.map((group, index) => (
-						<FadeInUp key={group.label} delay={index * 100}>
-							<div
-								className={`rounded-[18px] bg-slate-950/80 p-4 ${group.accent}`}
-							>
-								<div className="flex items-start justify-between gap-3">
-									<div>
-										<p className="font-mono text-[11px] uppercase tracking-[0.3em] text-fuchsia-200">
-											{group.label}
+					<div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+						{skillGroups.map((group, index) => (
+							<FadeInUp key={group.label} delay={index * 100}>
+								<div
+									className={`rounded-[18px] bg-slate-950/80 p-4 ${group.accent}`}
+								>
+									<div className="flex items-start justify-between gap-3">
+										<div>
+											<p className="font-mono text-[11px] uppercase tracking-[0.3em] text-fuchsia-200">
+												{group.label}
+											</p>
+											<p className="mt-1 text-xs uppercase tracking-[0.22em] text-zinc-400">
+												{group.items.length} Core Skills
+											</p>
+										</div>
+										<span className="rounded-full border-2 border-white/15 bg-black/30 px-2.5 py-1 font-mono text-[10px] uppercase tracking-[0.25em] text-cyan-200">
+											Stack
+										</span>
+									</div>
+
+									<div className="mt-4 flex flex-wrap gap-2">
+										{group.items.map((item) => (
+											<span
+												key={item}
+												className="rounded-full border border-cyan-300/45 bg-cyan-300/10 px-3 py-1.5 font-mono text-[11px] uppercase tracking-[0.18em] text-zinc-100"
+											>
+												{item}
+											</span>
+										))}
+									</div>
+								</div>
+							</FadeInUp>
+						))}
+					</div>
+				</section>
+
+				<section
+					id="experience"
+					className="relative z-10 mx-auto w-full max-w-7xl px-6 pb-24 sm:px-10 lg:px-16 lg:pb-32"
+				>
+					<div className="mb-8 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+						<div className="space-y-3">
+							<p className="font-mono text-sm uppercase tracking-[0.45em] text-lime-300">
+								Work Experience
+							</p>
+							<FadeInUp>
+								<h2 className="max-w-4xl text-2xl font-black uppercase leading-tight text-white sm:text-3xl lg:text-4xl">
+									A journey through roles and
+									responsibilities.
+								</h2>
+							</FadeInUp>
+						</div>
+						<p className="max-w-xl font-mono text-xs uppercase tracking-[0.28em] text-zinc-400">
+							Scan the path first, then open the modal for deeper
+							delivery details.
+						</p>
+					</div>
+
+					<div className="relative">
+						<div className="pointer-events-none absolute bottom-0 left-3 top-2 w-px bg-linear-to-b from-cyan-300/60 via-fuchsia-300/45 to-transparent lg:hidden" />
+						<div className="pointer-events-none absolute bottom-0 left-1/2 top-2 hidden w-px -translate-x-1/2 bg-linear-to-b from-cyan-300/60 via-fuchsia-300/45 to-transparent lg:block" />
+						<div className="space-y-5">
+							{sortedWorkExperiences.map((role, index) => {
+								const isLeft = index % 2 === 0;
+								const delay = index * 100;
+
+								return (
+									<div
+										key={`${role.title}-${role.period}`}
+										className="relative"
+									>
+										<div className="absolute left-0 top-7 h-5 w-5 rounded-full border-2 border-cyan-300 bg-slate-950 shadow-[0_0_0_4px_rgba(6,10,20,0.95)] lg:hidden" />
+
+										<div className="pl-10 lg:hidden">
+											<WorkTimelineCard
+												role={role}
+												onOpen={() =>
+													setSelectedDetailEntry(role)
+												}
+												delay={delay}
+											/>
+										</div>
+
+										<div className="hidden lg:grid lg:grid-cols-[1fr_72px_1fr] lg:items-center">
+											<div className="flex justify-end pr-6">
+												{isLeft ? (
+													<WorkTimelineCard
+														role={role}
+														align="left"
+														onOpen={() =>
+															setSelectedDetailEntry(
+																role,
+															)
+														}
+														delay={delay}
+													/>
+												) : (
+													<div aria-hidden="true" />
+												)}
+											</div>
+
+											<div className="flex justify-center">
+												<div className="h-5 w-5 rounded-full border-2 border-cyan-300 bg-slate-950 shadow-[0_0_0_4px_rgba(6,10,20,0.95)]" />
+											</div>
+
+											<div className="flex justify-start pl-6">
+												{!isLeft ? (
+													<WorkTimelineCard
+														role={role}
+														align="right"
+														onOpen={() =>
+															setSelectedDetailEntry(
+																role,
+															)
+														}
+														delay={delay}
+													/>
+												) : (
+													<div aria-hidden="true" />
+												)}
+											</div>
+										</div>
+									</div>
+								);
+							})}
+						</div>
+					</div>
+				</section>
+
+				<section
+					id="projects"
+					className="relative z-10 mx-auto w-full max-w-7xl px-6 pb-24 sm:px-10 lg:px-16 lg:pb-32"
+				>
+					<div className="mb-8 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+						<div className="space-y-3">
+							<p className="font-mono text-sm uppercase tracking-[0.45em] text-fuchsia-200">
+								Projects
+							</p>
+							<FadeInUp>
+								<h2 className="max-w-4xl text-2xl font-black uppercase leading-tight text-white sm:text-3xl lg:text-4xl">
+									Selected projects with measurable impact.
+								</h2>
+							</FadeInUp>
+						</div>
+						<p className="max-w-xl font-mono text-xs uppercase tracking-[0.28em] text-zinc-400">
+							Each project card highlights what was built, the
+							stack behind it, and where to explore further.
+						</p>
+					</div>
+
+					<div className="grid gap-4 xl:grid-cols-3">
+						{projectExperiences.map((project, index) => (
+							<FadeInUp key={project.title} delay={index * 100}>
+								<div className="rounded-[18px] border-2 border-lime-300/45 bg-slate-950/80 p-4 shadow-[6px_6px_0_rgba(34,211,238,0.3)]">
+									<div className="flex items-start justify-between gap-3">
+										<div>
+											<p className="font-mono text-[11px] uppercase tracking-[0.3em] text-cyan-300">
+												{project.subtitle}
+											</p>
+											<h3 className="mt-2 text-lg font-black uppercase text-white">
+												{project.title}
+											</h3>
+										</div>
+										{/* <span className="rounded-full border-2 border-white/15 bg-black/30 px-2.5 py-1 font-mono text-[10px] uppercase tracking-[0.25em] text-fuchsia-200">
+										Impact
+									</span> */}
+									</div>
+
+									<p className="mt-4 text-sm leading-6 text-zinc-100">
+										{project.summary}
+									</p>
+
+									<div className="mt-4 flex flex-wrap gap-2">
+										{project.tags.slice(0, 5).map((tag) => (
+											<span
+												key={tag}
+												className="rounded-full border border-cyan-300/45 bg-cyan-300/10 px-3 py-1.5 font-mono text-[11px] uppercase tracking-[0.18em] text-zinc-100"
+											>
+												{tag}
+											</span>
+										))}
+									</div>
+
+									<div className="mt-5 flex flex-wrap gap-3">
+										<button
+											type="button"
+											onClick={() =>
+												setSelectedDetailEntry(project)
+											}
+											className="inline-flex items-center justify-center rounded-full border-2 border-fuchsia-400 bg-fuchsia-400/10 px-4 py-2 text-[11px] font-black uppercase tracking-[0.22em] text-fuchsia-100 transition-transform duration-200 hover:-translate-y-1 cursor-pointer"
+										>
+											View Details
+										</button>
+										{project.url ? (
+											<a
+												href={project.url}
+												target="_blank"
+												rel="noreferrer"
+												className="inline-flex items-center justify-center rounded-full border-2 border-cyan-300/50 bg-black/30 px-4 py-2 text-[11px] font-black uppercase tracking-[0.22em] text-cyan-200 transition-transform duration-200 hover:-translate-y-1"
+											>
+												Visit Link
+											</a>
+										) : null}
+									</div>
+								</div>
+							</FadeInUp>
+						))}
+					</div>
+				</section>
+
+				<section
+					id="contact"
+					className="relative z-10 mx-auto w-full max-w-7xl px-6 pb-24 sm:px-10 lg:px-16 lg:pb-32"
+				>
+					<FadeInUp>
+						<div className="rounded-[28px] border-2 border-cyan-300 bg-slate-950/82 p-5 shadow-[10px_10px_0_rgba(244,114,182,0.24)] backdrop-blur-sm sm:p-7 lg:p-8">
+							<div className="grid gap-6 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] lg:items-start">
+								<div className="space-y-5">
+									<div className="space-y-3">
+										<p className="font-mono text-sm uppercase tracking-[0.45em] text-cyan-300">
+											Contact
 										</p>
-										<p className="mt-1 text-xs uppercase tracking-[0.22em] text-zinc-400">
-											{group.items.length} Core Skills
+										<h2 className="max-w-3xl text-2xl font-black uppercase leading-tight text-white sm:text-3xl lg:text-4xl">
+											Let&apos;s Build Together
+										</h2>
+										<p className="max-w-2xl text-sm leading-7 text-zinc-100 sm:text-base">
+											I&apos;m open to impactful backend,
+											full-stack, and product-focused
+											engineering work. If you&apos;re
+											building something meaningful,
+											let&apos;s talk about architecture,
+											delivery, and the right way to ship
+											it.
 										</p>
 									</div>
-									<span className="rounded-full border-2 border-white/15 bg-black/30 px-2.5 py-1 font-mono text-[10px] uppercase tracking-[0.25em] text-cyan-200">
-										Stack
-									</span>
+
+									<div className="flex flex-wrap gap-3">
+										<a
+											href="mailto:toetet248@gmail.com"
+											className="inline-flex items-center justify-center rounded-full border-2 border-cyan-300 bg-cyan-300 px-5 py-2.5 text-xs font-black uppercase tracking-[0.22em] text-slate-950 transition-transform duration-200 hover:-translate-y-1"
+										>
+											Send Email
+										</a>
+										<a
+											href="https://www.linkedin.com/in/toe-tet-aung-myint-b46b421b1/"
+											target="_blank"
+											rel="noreferrer"
+											className="inline-flex items-center justify-center rounded-full border-2 border-fuchsia-400 bg-fuchsia-400/10 px-5 py-2.5 text-xs font-black uppercase tracking-[0.22em] text-fuchsia-100 transition-transform duration-200 hover:-translate-y-1"
+										>
+											Open LinkedIn
+										</a>
+									</div>
 								</div>
 
-								<div className="mt-4 flex flex-wrap gap-2">
-									{group.items.map((item) => (
-										<span
-											key={item}
-											className="rounded-full border border-cyan-300/45 bg-cyan-300/10 px-3 py-1.5 font-mono text-[11px] uppercase tracking-[0.18em] text-zinc-100"
+								<div className="ml-auto grid w-full max-w-sm gap-3">
+									{contactActions.map((action, index) => (
+										<a
+											key={action.label}
+											href={action.href}
+											target={
+												action.href.startsWith(
+													"mailto:",
+												) ||
+												action.href.startsWith("tel:")
+													? undefined
+													: "_blank"
+											}
+											rel={
+												action.href.startsWith(
+													"mailto:",
+												) ||
+												action.href.startsWith("tel:")
+													? undefined
+													: "noreferrer"
+											}
+											className={`rounded-[22px] border-2 p-4 shadow-[4px_4px_0_rgba(34,211,238,0.1)] transition-transform duration-200 hover:-translate-y-0.5 ${action.accent}`}
 										>
-											{item}
-										</span>
+											<div className="flex items-center justify-between gap-3">
+												<p className="font-mono text-[11px] uppercase tracking-[0.32em]">
+													{action.label}
+												</p>
+												<p className="wrap-break-word text-base font-semibold text-white">
+													{action.value}
+												</p>
+											</div>
+										</a>
 									))}
 								</div>
 							</div>
-						</FadeInUp>
-					))}
-				</div>
-			</section>
+						</div>
+					</FadeInUp>
+				</section>
 
-			<section
-				id="experience"
-				className="relative z-10 mx-auto w-full max-w-7xl px-6 pb-24 sm:px-10 lg:px-16 lg:pb-32"
-			>
-				<div className="mb-8 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
-					<div className="space-y-3">
-						<p className="font-mono text-sm uppercase tracking-[0.45em] text-lime-300">
-							Work Experience
-						</p>
-						<h2 className="max-w-4xl text-2xl font-black uppercase leading-tight text-white sm:text-3xl lg:text-4xl">
-							A journey through roles and responsibilities.
-						</h2>
-					</div>
-					<p className="max-w-xl font-mono text-xs uppercase tracking-[0.28em] text-zinc-400">
-						Scan the path first, then open the modal for deeper
-						delivery details.
-					</p>
-				</div>
-
-				<div className="relative">
-					<div className="pointer-events-none absolute bottom-0 left-3 top-2 w-px bg-linear-to-b from-cyan-300/60 via-fuchsia-300/45 to-transparent lg:hidden" />
-					<div className="pointer-events-none absolute bottom-0 left-1/2 top-2 hidden w-px -translate-x-1/2 bg-linear-to-b from-cyan-300/60 via-fuchsia-300/45 to-transparent lg:block" />
-					<div className="space-y-5">
-						{sortedWorkExperiences.map((role, index) => {
-							const isLeft = index % 2 === 0;
-							const delay = index * 100;
-
-							return (
-								<div
-									key={`${role.title}-${role.period}`}
-									className="relative"
-								>
-									<div className="absolute left-0 top-7 h-5 w-5 rounded-full border-2 border-cyan-300 bg-slate-950 shadow-[0_0_0_4px_rgba(6,10,20,0.95)] lg:hidden" />
-
-									<div className="pl-10 lg:hidden">
-										<WorkTimelineCard
-											role={role}
-											onOpen={() =>
-												setSelectedDetailEntry(role)
-											}
-											delay={delay}
-										/>
-									</div>
-
-									<div className="hidden lg:grid lg:grid-cols-[1fr_72px_1fr] lg:items-center">
-										<div className="flex justify-end pr-6">
-											{isLeft ? (
-												<WorkTimelineCard
-													role={role}
-													align="left"
-													onOpen={() =>
-														setSelectedDetailEntry(
-															role,
-														)
-													}
-													delay={delay}
-												/>
-											) : (
-												<div aria-hidden="true" />
-											)}
-										</div>
-
-										<div className="flex justify-center">
-											<div className="h-5 w-5 rounded-full border-2 border-cyan-300 bg-slate-950 shadow-[0_0_0_4px_rgba(6,10,20,0.95)]" />
-										</div>
-
-										<div className="flex justify-start pl-6">
-											{!isLeft ? (
-												<WorkTimelineCard
-													role={role}
-													align="right"
-													onOpen={() =>
-														setSelectedDetailEntry(
-															role,
-														)
-													}
-													delay={delay}
-												/>
-											) : (
-												<div aria-hidden="true" />
-											)}
-										</div>
-									</div>
-								</div>
-							);
-						})}
-					</div>
-				</div>
-			</section>
-
-			<section
-				id="projects"
-				className="relative z-10 mx-auto w-full max-w-7xl px-6 pb-24 sm:px-10 lg:px-16 lg:pb-32"
-			>
-				<div className="mb-8 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
-					<div className="space-y-3">
-						<p className="font-mono text-sm uppercase tracking-[0.45em] text-fuchsia-200">
-							Projects
-						</p>
-						<h2 className="max-w-4xl text-2xl font-black uppercase leading-tight text-white sm:text-3xl lg:text-4xl">
-							Selected projects with measurable impact.
-						</h2>
-					</div>
-					<p className="max-w-xl font-mono text-xs uppercase tracking-[0.28em] text-zinc-400">
-						Each project card highlights what was built, the stack
-						behind it, and where to explore further.
-					</p>
-				</div>
-
-				<div className="grid gap-4 xl:grid-cols-3">
-					{projectExperiences.map((project, index) => (
-						<FadeInUp key={project.title} delay={index * 100}>
-							<div className="rounded-[18px] border-2 border-lime-300/45 bg-slate-950/80 p-4 shadow-[6px_6px_0_rgba(34,211,238,0.3)]">
-								<div className="flex items-start justify-between gap-3">
-									<div>
-										<p className="font-mono text-[11px] uppercase tracking-[0.3em] text-cyan-300">
-											{project.subtitle}
-										</p>
-										<h3 className="mt-2 text-lg font-black uppercase text-white">
-											{project.title}
-										</h3>
-									</div>
-									{/* <span className="rounded-full border-2 border-white/15 bg-black/30 px-2.5 py-1 font-mono text-[10px] uppercase tracking-[0.25em] text-fuchsia-200">
-										Impact
-									</span> */}
-								</div>
-
-								<p className="mt-4 text-sm leading-6 text-zinc-100">
-									{project.summary}
-								</p>
-
-								<div className="mt-4 flex flex-wrap gap-2">
-									{project.tags.slice(0, 5).map((tag) => (
-										<span
-											key={tag}
-											className="rounded-full border border-cyan-300/45 bg-cyan-300/10 px-3 py-1.5 font-mono text-[11px] uppercase tracking-[0.18em] text-zinc-100"
-										>
-											{tag}
-										</span>
-									))}
-								</div>
-
-								<div className="mt-5 flex flex-wrap gap-3">
-									<button
-										type="button"
-										onClick={() =>
-											setSelectedDetailEntry(project)
-										}
-										className="inline-flex items-center justify-center rounded-full border-2 border-fuchsia-400 bg-fuchsia-400/10 px-4 py-2 text-[11px] font-black uppercase tracking-[0.22em] text-fuchsia-100 transition-transform duration-200 hover:-translate-y-1 cursor-pointer"
+				{selectedDetailEntry ? (
+					<div className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto bg-black/80 px-4 py-8 sm:px-6">
+						<div
+							className="absolute inset-0"
+							onClick={() => setSelectedDetailEntry(null)}
+							aria-hidden="true"
+						/>
+						<dialog
+							open
+							aria-labelledby="detail-modal-title"
+							className={`relative z-10 w-full max-w-4xl rounded-[24px] border-2 border-cyan-300 bg-[#050816] shadow-[10px_10px_0_rgba(244,114,182,0.42)] modal-fade-in-up ${modalVisible ? "modal-visible" : ""}`}
+						>
+							<div className="flex items-center justify-between rounded-t-[24px] border-b-2 border-fuchsia-400 bg-[#170628] px-5 py-3">
+								<div>
+									<p className="font-mono text-[11px] uppercase tracking-[0.3em] text-fuchsia-200">
+										Detail Viewer
+									</p>
+									<h3
+										id="detail-modal-title"
+										className="mt-2 text-lg font-black uppercase text-white sm:text-xl"
 									>
-										View Details
-									</button>
-									{project.url ? (
+										{selectedDetailEntry.title}
+									</h3>
+								</div>
+								<button
+									type="button"
+									onClick={() => setSelectedDetailEntry(null)}
+									className="rounded-full border-2 border-fuchsia-400 bg-fuchsia-400/10 px-3 py-1 font-mono text-[11px] uppercase tracking-[0.22em] text-fuchsia-100 cursor-pointer"
+								>
+									Close
+								</button>
+							</div>
+
+							<div className="space-y-6 p-5 sm:p-6">
+								<div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+									<div>
+										<p className="font-mono text-sm uppercase tracking-[0.22em] text-cyan-300">
+											{selectedDetailEntry.subtitle}
+										</p>
+										<p className="mt-2 font-mono text-[11px] uppercase tracking-[0.28em] text-zinc-400">
+											{selectedDetailEntry.period}
+										</p>
+									</div>
+									{selectedDetailEntry.url ? (
 										<a
-											href={project.url}
+											href={selectedDetailEntry.url}
 											target="_blank"
 											rel="noreferrer"
-											className="inline-flex items-center justify-center rounded-full border-2 border-cyan-300/50 bg-black/30 px-4 py-2 text-[11px] font-black uppercase tracking-[0.22em] text-cyan-200 transition-transform duration-200 hover:-translate-y-1"
+											className="inline-flex w-48 items-center justify-center gap-2 rounded-full border-2 border-cyan-300 bg-cyan-300 px-4 py-2 text-[11px] font-black uppercase tracking-[0.22em] text-slate-950"
 										>
-											Visit Link
+											<ExternalLink className="h-3.5 w-3.5" />
+											Open Live Site
 										</a>
 									) : null}
 								</div>
-							</div>
-						</FadeInUp>
-					))}
-				</div>
-			</section>
 
-			<section
-				id="contact"
-				className="relative z-10 mx-auto w-full max-w-7xl px-6 pb-24 sm:px-10 lg:px-16 lg:pb-32"
-			>
-				<FadeInUp>
-					<div className="rounded-[28px] border-2 border-cyan-300 bg-slate-950/82 p-5 shadow-[10px_10px_0_rgba(244,114,182,0.24)] backdrop-blur-sm sm:p-7 lg:p-8">
-						<div className="grid gap-6 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] lg:items-start">
-							<div className="space-y-5">
-								<div className="space-y-3">
-									<p className="font-mono text-sm uppercase tracking-[0.45em] text-cyan-300">
-										Contact
-									</p>
-									<h2 className="max-w-3xl text-2xl font-black uppercase leading-tight text-white sm:text-3xl lg:text-4xl">
-										Let&apos;s Build Together
-									</h2>
-									<p className="max-w-2xl text-sm leading-7 text-zinc-100 sm:text-base">
-										I&apos;m open to impactful backend,
-										full-stack, and product-focused
-										engineering work. If you&apos;re
-										building something meaningful,
-										let&apos;s talk about architecture,
-										delivery, and the right way to ship it.
-									</p>
-								</div>
-
-								<div className="flex flex-wrap gap-3">
-									<a
-										href="mailto:toetet248@gmail.com"
-										className="inline-flex items-center justify-center rounded-full border-2 border-cyan-300 bg-cyan-300 px-5 py-2.5 text-xs font-black uppercase tracking-[0.22em] text-slate-950 transition-transform duration-200 hover:-translate-y-1"
-									>
-										Send Email
-									</a>
-									<a
-										href="https://www.linkedin.com/in/toe-tet-aung-myint-b46b421b1/"
-										target="_blank"
-										rel="noreferrer"
-										className="inline-flex items-center justify-center rounded-full border-2 border-fuchsia-400 bg-fuchsia-400/10 px-5 py-2.5 text-xs font-black uppercase tracking-[0.22em] text-fuchsia-100 transition-transform duration-200 hover:-translate-y-1"
-									>
-										Open LinkedIn
-									</a>
-								</div>
-							</div>
-
-							<div className="ml-auto grid w-full max-w-sm gap-3">
-								{contactActions.map((action, index) => (
-									<a
-										key={action.label}
-										href={action.href}
-										target={
-											action.href.startsWith("mailto:") ||
-											action.href.startsWith("tel:")
-												? undefined
-												: "_blank"
-										}
-										rel={
-											action.href.startsWith("mailto:") ||
-											action.href.startsWith("tel:")
-												? undefined
-												: "noreferrer"
-										}
-										className={`rounded-[22px] border-2 p-4 shadow-[4px_4px_0_rgba(34,211,238,0.1)] transition-transform duration-200 hover:-translate-y-0.5 ${action.accent}`}
-									>
-										<div className="flex items-center justify-between gap-3">
-											<p className="font-mono text-[11px] uppercase tracking-[0.32em]">
-												{action.label}
-											</p>
-											<p className="wrap-break-word text-base font-semibold text-white">
-												{action.value}
-											</p>
-										</div>
-									</a>
-								))}
-							</div>
-						</div>
-					</div>
-				</FadeInUp>
-			</section>
-
-			{selectedDetailEntry ? (
-				<div className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto bg-black/80 px-4 py-8 sm:px-6">
-					<div
-						className="absolute inset-0"
-						onClick={() => setSelectedDetailEntry(null)}
-						aria-hidden="true"
-					/>
-					<dialog
-						open
-						aria-labelledby="detail-modal-title"
-						className={`relative z-10 w-full max-w-4xl rounded-[24px] border-2 border-cyan-300 bg-[#050816] shadow-[10px_10px_0_rgba(244,114,182,0.42)] modal-fade-in-up ${modalVisible ? "modal-visible" : ""}`}
-					>
-						<div className="flex items-center justify-between rounded-t-[24px] border-b-2 border-fuchsia-400 bg-[#170628] px-5 py-3">
-							<div>
-								<p className="font-mono text-[11px] uppercase tracking-[0.3em] text-fuchsia-200">
-									Detail Viewer
-								</p>
-								<h3
-									id="detail-modal-title"
-									className="mt-2 text-lg font-black uppercase text-white sm:text-xl"
-								>
-									{selectedDetailEntry.title}
-								</h3>
-							</div>
-							<button
-								type="button"
-								onClick={() => setSelectedDetailEntry(null)}
-								className="rounded-full border-2 border-fuchsia-400 bg-fuchsia-400/10 px-3 py-1 font-mono text-[11px] uppercase tracking-[0.22em] text-fuchsia-100 cursor-pointer"
-							>
-								Close
-							</button>
-						</div>
-
-						<div className="space-y-6 p-5 sm:p-6">
-							<div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-								<div>
-									<p className="font-mono text-sm uppercase tracking-[0.22em] text-cyan-300">
-										{selectedDetailEntry.subtitle}
-									</p>
-									<p className="mt-2 font-mono text-[11px] uppercase tracking-[0.28em] text-zinc-400">
-										{selectedDetailEntry.period}
-									</p>
-								</div>
-								{selectedDetailEntry.url ? (
-									<a
-										href={selectedDetailEntry.url}
-										target="_blank"
-										rel="noreferrer"
-										className="inline-flex items-center justify-center rounded-full border-2 border-cyan-300 bg-cyan-300 px-4 py-2 text-[11px] font-black uppercase tracking-[0.22em] text-slate-950"
-									>
-										Open Live Site
-									</a>
-								) : null}
-							</div>
-
-							{/* <p className="text-sm leading-7 text-zinc-100">
+								{/* <p className="text-sm leading-7 text-zinc-100">
 								{selectedDetailEntry.summary}
 							</p> */}
 
-							<div className="flex flex-wrap gap-2">
-								{selectedDetailEntry.tags.map((tag, index) => (
-									<span
-										key={index}
-										className="rounded-full border border-lime-300/45 bg-lime-300/10 px-3 py-1.5 font-mono text-[11px] uppercase tracking-[0.18em] text-zinc-100"
-									>
-										{tag}
-									</span>
-								))}
-							</div>
+								<div className="flex flex-wrap gap-2">
+									{selectedDetailEntry.tags.map(
+										(tag, index) => (
+											<span
+												key={index}
+												className="rounded-full border border-lime-300/45 bg-lime-300/10 px-3 py-1.5 font-mono text-[11px] uppercase tracking-[0.18em] text-zinc-100"
+											>
+												{tag}
+											</span>
+										),
+									)}
+								</div>
 
-							<div className="grid gap-4">
-								{selectedDetailEntry.highlights.map((item) => (
-									<div key={item.label}>
-										<p className="font-mono text-[11px] uppercase bold tracking-[0.3em] text-fuchsia-200">
-											{item.label}
-										</p>
-										<p className="mt-3 text-sm leading-7 text-zinc-100">
-											{item.detail}
-										</p>
-									</div>
-								))}
+								<div className="grid gap-4">
+									{selectedDetailEntry.highlights.map(
+										(item) => (
+											<div key={item.label}>
+												<p className="font-mono text-[11px] uppercase bold tracking-[0.3em] text-fuchsia-200">
+													{item.label}
+												</p>
+												<p className="mt-3 text-sm leading-7 text-zinc-100">
+													{item.detail}
+												</p>
+											</div>
+										),
+									)}
+								</div>
 							</div>
-						</div>
-					</dialog>
-				</div>
-			) : null}
-		</main>
+						</dialog>
+					</div>
+				) : null}
+			</main>
+		</>
 	);
 }
