@@ -1,6 +1,8 @@
 "use client";
 
 import { useEffect, useState, useRef } from "react";
+import Image from "next/image";
+import AsciiArt from "@/components/AsciiArt";
 
 function useFadeInUp(delay: number = 0) {
 	const ref = useRef<HTMLElement>(null);
@@ -83,7 +85,7 @@ const typingPhrases = [
 
 const stats = [
 	{ label: "Experience", value: "8+ Years" },
-	{ label: "Focus", value: "Backend & Microservices" },
+	{ label: "Focus", value: "Full-Stack" },
 	{ label: "Stack", value: "NestJs / NextJs" },
 ];
 
@@ -95,9 +97,10 @@ const floatingBadges = [
 ];
 
 const terminalLines = [
-	"> engineering --focus",
-	"Designing reliable, scalable, and maintainable software systems. Balancing business needs with performance, security, and code quality.",
-	"> current --status",
+	"> about --me",
+	"Dedicated Software Engineer with 8 years of software engineering experience specializing in scalable backend architecture, distributed systems, and high-performance web applications.",
+	" Backed by a strong background leading technical teams and engineering enterprise multi-tenant SaaS platforms with secure database isolation in previous Full Stack roles, experienced in AI-assisted software development to accelerate development. ",
+	"Proven in designing Nx monorepos, delivering encrypted payment integrations, and utilizing AWS infrastructure, with a documented ability to translate complex business requirements into high-performance production code. ",
 	"Open to challenging opportunities and continuous learning.",
 ];
 
@@ -119,32 +122,32 @@ const aboutHighlights = [
 const skillGroups = [
 	{
 		label: "Languages",
-		accent: "border-cyan-300 shadow-[6px_6px_0_rgba(34,211,238,0.35)]",
+		accent: "border border-cyan-300/45 bg-slate-950/82 p-4 shadow-[8px_8px_0_rgba(244,114,182,0.18)] backdrop-blur-sm",
 		items: ["TypeScript", "JavaScript", "PHP", "SQL"],
 	},
 	{
 		label: "Backend",
-		accent: "border-lime-300 shadow-[6px_6px_0_rgba(163,230,53,0.28)]",
+		accent: "border border-lime-300/45 bg-slate-950/82 p-4 shadow-[6px_6px_0_rgba(163,230,53,0.28)] backdrop-blur-sm",
 		items: ["Node.js", "NestJS", "Express.js", "Laravel", "PHP"],
 	},
 	{
 		label: "Frontend",
-		accent: "border-fuchsia-400 shadow-[6px_6px_0_rgba(244,114,182,0.38)]",
+		accent: "border border-fuchsia-400/45 bg-slate-950/82 p-4 shadow-[6px_6px_0_rgba(244,114,182,0.38)] backdrop-blur-sm",
 		items: ["React", "Next.js", "Vue.js", "Tailwind CSS"],
 	},
 	{
 		label: "Databases & Caching",
-		accent: "border-cyan-300 shadow-[6px_6px_0_rgba(244,114,182,0.28)]",
+		accent: "border border-cyan-300/45 bg-slate-950/82 p-4 shadow-[6px_6px_0_rgba(244,114,182,0.28)] backdrop-blur-sm",
 		items: ["PostgreSQL", "MySQL", "MongoDB", "Redis"],
 	},
 	{
 		label: "Cloud & DevOps",
-		accent: "border-lime-300 shadow-[6px_6px_0_rgba(34,211,238,0.35)]",
+		accent: "border border-lime-300/45 bg-slate-950/82 p-4 shadow-[6px_6px_0_rgba(34,211,238,0.35)] backdrop-blur-sm",
 		items: ["AWS", "GCP", "Docker", "Nginx", "Linux", "Git"],
 	},
 	{
 		label: "Tools & Architecture",
-		accent: "border-fuchsia-400 shadow-[6px_6px_0_rgba(34,211,238,0.26)]",
+		accent: "border border-fuchsia-400/45 bg-slate-950/82 p-4 shadow-[6px_6px_0_rgba(34,211,238,0.26)] backdrop-blur-sm",
 		items: ["Microservices", "Nx", "Jest", "Pusher", "k6"],
 	},
 ];
@@ -213,6 +216,8 @@ const workExperiences: ExperienceEntry[] = [
 			"Jest",
 			"TypeORM",
 			"JWT",
+			"Refresh Token",
+			"Microservices",
 		],
 		roleLabel: "Current Position",
 		sideNote:
@@ -287,7 +292,12 @@ const workExperiences: ExperienceEntry[] = [
 		tags: ["PHP", "Laravel", "cPanel", "VPS", "Ubuntu"],
 		roleLabel: "Previous Position",
 		sideNote: "",
-		highlights: [],
+		highlights: [
+			{
+				label: "Development",
+				detail: "Directed the end-to-end delivery of diverse CMS and in-house systems, from initial requirement gathering and system architecture to successful production deployment on cPanel and VPS environments.",
+			},
+		],
 	},
 	{
 		title: "Junior Web Developer",
@@ -306,7 +316,12 @@ const workExperiences: ExperienceEntry[] = [
 		],
 		roleLabel: "Previous Position",
 		sideNote: "",
-		highlights: [],
+		highlights: [
+			{
+				label: "Development",
+				detail: "Enhanced E-commerce and Accounting platforms by resolving critical bugs and implementing new features, while developing and deploying a custom CMS to GCP staging environments.",
+			},
+		],
 	},
 	{
 		title: "Junior Web Developer",
@@ -317,7 +332,12 @@ const workExperiences: ExperienceEntry[] = [
 		tags: ["PHP", "Laravel", "cPanel", "VPS", "Ubuntu"],
 		roleLabel: "Previous Position",
 		sideNote: "",
-		highlights: [],
+		highlights: [
+			{
+				label: "Development",
+				detail: "Engineered a diverse portfolio of web applications and blog platforms, managing the full deployment lifecycle on cPanel and VPS environments while collaborating with project managers to efficiently handle technical change requests.",
+			},
+		],
 	},
 ];
 
@@ -721,7 +741,7 @@ export default function Home() {
 								</span> */}
 							</h1>
 
-							<div className="max-w-2xl rounded-[22px] border-3 border-cyan-300 bg-slate-950/85 p-4 shadow-[6px_6px_0_rgba(244,114,182,0.6)]">
+							<div className="max-w-2xl rounded-[22px] border-2 border-cyan-300 bg-slate-950/85 p-4 shadow-[6px_6px_0_rgba(244,114,182,0.6)]">
 								<p className="font-mono text-[11px] uppercase tracking-[0.32em] text-cyan-300">
 									Current Focus
 								</p>
@@ -758,7 +778,7 @@ export default function Home() {
 										});
 									}
 								}}
-								className="inline-flex items-center justify-center rounded-full border-3 border-cyan-300 bg-cyan-300 px-6 py-2.5 text-xs font-black uppercase tracking-[0.22em] text-slate-950 transition-transform duration-200 hover:-translate-y-1"
+								className="inline-flex items-center justify-center rounded-full border-2 border-cyan-300 bg-cyan-300 px-6 py-2.5 text-xs font-black uppercase tracking-[0.22em] text-slate-950 transition-transform duration-200 hover:-translate-y-1"
 							>
 								View Projects
 							</a>
@@ -774,54 +794,53 @@ export default function Home() {
 										});
 									}
 								}}
-								className="inline-flex items-center justify-center rounded-full border-3 border-fuchsia-400 bg-fuchsia-400/10 px-6 py-2.5 text-xs font-black uppercase tracking-[0.22em] text-fuchsia-100 transition-transform duration-200 hover:-translate-y-1"
+								className="inline-flex items-center justify-center rounded-full border-2 border-fuchsia-400 bg-fuchsia-400/10 px-6 py-2.5 text-xs font-black uppercase tracking-[0.22em] text-fuchsia-100 transition-transform duration-200 hover:-translate-y-1"
 							>
 								Let&apos;s Talk
 							</a>
 						</div>
 					</div>
 
-					<div className="rounded-[22px] border-3 border-lime-300 bg-slate-950/85 p-3 shadow-[6px_6px_0_rgba(34,211,238,0.45)]">
-						<div className="rounded-[16px] border-3 border-fuchsia-400 bg-[#19062a] p-4">
-							<div className="mb-4 flex items-center justify-between border-b-2 border-dashed border-fuchsia-300/60 pb-3 font-mono text-[11px] uppercase tracking-[0.3em] text-fuchsia-200">
-								<span>TTAM.EXE</span>
-								<span>ONLINE</span>
+					{/* <div className="rounded-[22px] border-2 border-lime-300 bg-slate-950/85 p-3 shadow-[6px_6px_0_rgba(34,211,238,0.45)]"> */}
+					<div className="rounded-[16px] mt-10 border-2 border-fuchsia-400 bg-[#19062a] p-4 shadow-[6px_6px_0_rgba(34,211,238,0.45)]">
+						<div className="mb-4 flex items-center justify-between border-b-2 border-dashed border-fuchsia-300/60 pb-3 font-mono text-[11px] uppercase tracking-[0.3em] text-fuchsia-200">
+							<span>TTAM.EXE</span>
+							<span>ONLINE</span>
+						</div>
+
+						<div className="space-y-3 font-mono">
+							<p className="text-xs uppercase tracking-[0.28em] text-cyan-300">
+								Status Board
+							</p>
+							<div className="space-y-2.5">
+								{stats.map((stat) => (
+									<div
+										key={stat.label}
+										className="flex items-center justify-between rounded-2xl border border-cyan-300/50 bg-black/30 px-3 py-3"
+									>
+										<span className="text-xs uppercase tracking-[0.24em] text-zinc-300">
+											{stat.label}
+										</span>
+										<span className="block text-right text-sm font-bold uppercase tracking-[0.16em] text-lime-300">
+											{stat.value}
+										</span>
+									</div>
+								))}
 							</div>
 
-							<div className="space-y-3 font-mono">
-								<p className="text-xs uppercase tracking-[0.28em] text-cyan-300">
-									Status Board
+							<div className="rounded-2xl border border-fuchsia-400/60 bg-fuchsia-400/10 p-3">
+								<p className="text-[11px] uppercase tracking-[0.3em] text-fuchsia-200">
+									Mission
 								</p>
-								<div className="space-y-2.5">
-									{stats.map((stat) => (
-										<div
-											key={stat.label}
-											className="flex items-center justify-between rounded-2xl border-2 border-cyan-300/50 bg-black/30 px-3 py-3"
-										>
-											<span className="text-xs uppercase tracking-[0.24em] text-zinc-300">
-												{stat.label}
-											</span>
-											<span className="block text-right text-sm font-bold uppercase tracking-[0.16em] text-lime-300">
-												{stat.value}
-											</span>
-										</div>
-									))}
-								</div>
-
-								<div className="rounded-2xl border-2 border-fuchsia-400/60 bg-fuchsia-400/10 p-3">
-									<p className="text-[11px] uppercase tracking-[0.3em] text-fuchsia-200">
-										Mission
-									</p>
-									<p className="mt-2 text-sm leading-6 text-zinc-100">
-										Transforming complex business
-										requirements into scalable architecture,
-										resilient systems, and production-ready
-										software.
-									</p>
-								</div>
+								<p className="mt-2 text-sm leading-6 text-zinc-100">
+									Transforming complex business requirements
+									into scalable architecture, resilient
+									systems, and production-ready software.
+								</p>
 							</div>
 						</div>
 					</div>
+					{/* </div> */}
 				</div>
 			</section>
 
@@ -844,90 +863,49 @@ export default function Home() {
 					</p> */}
 				</div>
 
-				<div className="grid gap-6 lg:grid-cols-[minmax(0,1.15fr)_minmax(260px,0.85fr)]">
-					<div className="rounded-[24px] border-3 border-lime-300 bg-[#06110a]/90 p-3 shadow-[8px_8px_0_rgba(34,211,238,0.35)]">
-						<div className="rounded-[18px] border-3 border-fuchsia-400 bg-[#020805]">
-							<div className="flex items-center justify-between border-b-3 border-fuchsia-400 bg-[#14051f] px-4 py-2.5">
-								<div className="flex items-center gap-2">
-									<span className="h-2.5 w-2.5 rounded-full bg-red-400" />
-									<span className="h-2.5 w-2.5 rounded-full bg-yellow-300" />
-									<span className="h-2.5 w-2.5 rounded-full bg-lime-300" />
-								</div>
-								<p className="font-mono text-[11px] uppercase tracking-[0.3em] text-fuchsia-200">
-									about.exe
-								</p>
-							</div>
-
-							<div className="space-y-5 p-4 font-mono text-xs leading-7 text-lime-300 sm:p-5 sm:text-sm">
-								<div className="space-y-2.5">
-									{terminalLines.map((line, index) => (
-										<p key={`${line}-${index}`}>
-											{line.startsWith(">") ? (
-												<>
-													<span className="text-cyan-300">
-														C:\TTAM&gt;
-													</span>{" "}
-													<span>{line.slice(2)}</span>
-												</>
-											) : (
-												line
-											)}
-										</p>
-									))}
-								</div>
-
-								<div className="rounded-[16px] border-2 border-lime-300/50 bg-lime-300/5 p-3.5">
-									<p className="text-sm leading-7 text-cyan-300">
-										Dedicated Software Engineer with 8 years
-										of experience specializing in scalable
-										backend architecture, microservices, and
-										high-performance web applications. With
-										a strong background leading technical
-										teams and building enterprise
-										multi-tenant SaaS platforms with secure
-										database isolation, I leverage
-										AI-assisted software development to
-										accelerate delivery while maintaining
-										code quality and engineering standards.{" "}
-										<span
-											className="retro-cursor ml-2 inline-block h-[1em] w-2 translate-y-1 bg-lime-300"
-											aria-hidden="true"
-										/>
-									</p>
-								</div>
-							</div>
+				<div className="rounded-[18px] border-2 border-cyan-300/45 bg-slate-950 shadow-[8px_8px_0_rgba(244,114,182,0.18)]">
+					<div className="rounded-t-[16px] flex items-center justify-between border-2 border-cyan-300/45 bg-slate-950 px-4 py-2.5">
+						<div className="flex items-center gap-2">
+							<span className="h-2.5 w-2.5 rounded-full bg-red-400" />
+							<span className="h-2.5 w-2.5 rounded-full bg-yellow-300" />
+							<span className="h-2.5 w-2.5 rounded-full bg-lime-300" />
 						</div>
+						<p className="font-mono text-[11px] uppercase tracking-[0.3em] text-fuchsia-200">
+							about.exe
+						</p>
 					</div>
 
-					<div className="space-y-4">
-						{aboutHighlights.map((item, index) => (
-							<FadeInUp key={item.label} delay={index * 100}>
-								<div className="rounded-[18px] border-3 border-cyan-300 bg-slate-950/80 p-4 shadow-[6px_6px_0_rgba(244,114,182,0.45)]">
-									<p className="font-mono text-[11px] uppercase tracking-[0.3em] text-fuchsia-200">
-										{item.label}
+					<div className="grid gap-6 p-4 sm:p-5 lg:grid-cols-[minmax(0,1.15fr)_minmax(200px,0.85fr)]">
+						{/* Terminal Text */}
+						<div className="font-mono text-xs leading-7 text-zinc-100 sm:text-xs">
+							<div className="space-y-2.5">
+								{terminalLines.map((line, index) => (
+									<p key={`${line}-${index}`}>
+										{line.startsWith(">") ? (
+											<>
+												<span className="text-cyan-300">
+													C:\TTAM&gt;
+												</span>{" "}
+												<span>{line.slice(2)}</span>
+											</>
+										) : (
+											line
+										)}
 									</p>
-									<p className="mt-2 text-sm leading-6 text-zinc-100">
-										{item.value}
-									</p>
-								</div>
-							</FadeInUp>
-						))}
-
-						<FadeInUp delay={aboutHighlights.length * 100}>
-							<div className="rounded-[18px] border-3 border-fuchsia-400 bg-fuchsia-400/10 p-4">
-								<p className="font-mono text-[11px] uppercase tracking-[0.3em] text-fuchsia-100">
-									Core Themes
-								</p>
-								<p className="mt-2 text-sm leading-6 text-zinc-100">
-									Experienced in designing Nx monorepos,
-									delivering encrypted payment integrations,
-									and utilizing AWS infrastructure, with a
-									proven ability to translate complex business
-									requirements into scalable, secure, and
-									high-performance production systems.
-								</p>
+								))}
 							</div>
-						</FadeInUp>
+						</div>
+
+						{/* ASCII Art */}
+						<div className="flex items-center justify-center">
+							<div className="rounded-[18px] overflow-hidden ">
+								<AsciiArt
+									src="/profile-image.jpeg"
+									width={50}
+									fontSize={10}
+								/>
+							</div>
+						</div>
 					</div>
 				</div>
 			</section>
@@ -945,7 +923,7 @@ export default function Home() {
 							A production-ready stack across platform layers.
 						</h2>
 					</div>
-					{/* <div className="max-w-xl rounded-[18px] border-3 border-fuchsia-400 bg-fuchsia-400/10 px-4 py-3 shadow-[6px_6px_0_rgba(34,211,238,0.26)]">
+					{/* <div className="max-w-xl rounded-[18px] border-2 border-fuchsia-400 bg-fuchsia-400/10 px-4 py-3 shadow-[6px_6px_0_rgba(34,211,238,0.26)]">
 						<p className="font-mono text-[11px] uppercase tracking-[0.3em] text-fuchsia-100">
 							Loadout
 						</p>
@@ -961,7 +939,7 @@ export default function Home() {
 					{skillGroups.map((group, index) => (
 						<FadeInUp key={group.label} delay={index * 100}>
 							<div
-								className={`rounded-[18px] border-3 bg-slate-950/80 p-4 ${group.accent}`}
+								className={`rounded-[18px] bg-slate-950/80 p-4 ${group.accent}`}
 							>
 								<div className="flex items-start justify-between gap-3">
 									<div>
@@ -981,7 +959,7 @@ export default function Home() {
 									{group.items.map((item) => (
 										<span
 											key={item}
-											className="rounded-full border-2 border-cyan-300/45 bg-cyan-300/10 px-3 py-1.5 font-mono text-[11px] uppercase tracking-[0.18em] text-zinc-100"
+											className="rounded-full border border-cyan-300/45 bg-cyan-300/10 px-3 py-1.5 font-mono text-[11px] uppercase tracking-[0.18em] text-zinc-100"
 										>
 											{item}
 										</span>
@@ -1105,7 +1083,7 @@ export default function Home() {
 				<div className="grid gap-4 xl:grid-cols-3">
 					{projectExperiences.map((project, index) => (
 						<FadeInUp key={project.title} delay={index * 100}>
-							<div className="rounded-[18px] border-3 border-lime-300 bg-slate-950/80 p-4 shadow-[6px_6px_0_rgba(34,211,238,0.3)]">
+							<div className="rounded-[18px] border-2 border-lime-300/45 bg-slate-950/80 p-4 shadow-[6px_6px_0_rgba(34,211,238,0.3)]">
 								<div className="flex items-start justify-between gap-3">
 									<div>
 										<p className="font-mono text-[11px] uppercase tracking-[0.3em] text-cyan-300">
@@ -1128,7 +1106,7 @@ export default function Home() {
 									{project.tags.slice(0, 5).map((tag) => (
 										<span
 											key={tag}
-											className="rounded-full border-2 border-cyan-300/45 bg-cyan-300/10 px-3 py-1.5 font-mono text-[11px] uppercase tracking-[0.18em] text-zinc-100"
+											className="rounded-full border border-cyan-300/45 bg-cyan-300/10 px-3 py-1.5 font-mono text-[11px] uppercase tracking-[0.18em] text-zinc-100"
 										>
 											{tag}
 										</span>
@@ -1141,7 +1119,7 @@ export default function Home() {
 										onClick={() =>
 											setSelectedDetailEntry(project)
 										}
-										className="inline-flex items-center justify-center rounded-full border-3 border-fuchsia-400 bg-fuchsia-400/10 px-4 py-2 text-[11px] font-black uppercase tracking-[0.22em] text-fuchsia-100 transition-transform duration-200 hover:-translate-y-1 cursor-pointer"
+										className="inline-flex items-center justify-center rounded-full border-2 border-fuchsia-400 bg-fuchsia-400/10 px-4 py-2 text-[11px] font-black uppercase tracking-[0.22em] text-fuchsia-100 transition-transform duration-200 hover:-translate-y-1 cursor-pointer"
 									>
 										View Details
 									</button>
@@ -1150,7 +1128,7 @@ export default function Home() {
 											href={project.url}
 											target="_blank"
 											rel="noreferrer"
-											className="inline-flex items-center justify-center rounded-full border-3 border-cyan-300/50 bg-black/30 px-4 py-2 text-[11px] font-black uppercase tracking-[0.22em] text-cyan-200 transition-transform duration-200 hover:-translate-y-1"
+											className="inline-flex items-center justify-center rounded-full border-2 border-cyan-300/50 bg-black/30 px-4 py-2 text-[11px] font-black uppercase tracking-[0.22em] text-cyan-200 transition-transform duration-200 hover:-translate-y-1"
 										>
 											Visit Link
 										</a>
@@ -1167,7 +1145,7 @@ export default function Home() {
 				className="relative z-10 mx-auto w-full max-w-7xl px-6 pb-24 sm:px-10 lg:px-16 lg:pb-32"
 			>
 				<FadeInUp>
-					<div className="rounded-[28px] border-3 border-cyan-300 bg-slate-950/82 p-5 shadow-[10px_10px_0_rgba(244,114,182,0.24)] backdrop-blur-sm sm:p-7 lg:p-8">
+					<div className="rounded-[28px] border-2 border-cyan-300 bg-slate-950/82 p-5 shadow-[10px_10px_0_rgba(244,114,182,0.24)] backdrop-blur-sm sm:p-7 lg:p-8">
 						<div className="grid gap-6 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] lg:items-start">
 							<div className="space-y-5">
 								<div className="space-y-3">
@@ -1190,7 +1168,7 @@ export default function Home() {
 								<div className="flex flex-wrap gap-3">
 									<a
 										href="mailto:toetet248@gmail.com"
-										className="inline-flex items-center justify-center rounded-full border-3 border-cyan-300 bg-cyan-300 px-5 py-2.5 text-xs font-black uppercase tracking-[0.22em] text-slate-950 transition-transform duration-200 hover:-translate-y-1"
+										className="inline-flex items-center justify-center rounded-full border-2 border-cyan-300 bg-cyan-300 px-5 py-2.5 text-xs font-black uppercase tracking-[0.22em] text-slate-950 transition-transform duration-200 hover:-translate-y-1"
 									>
 										Send Email
 									</a>
@@ -1198,7 +1176,7 @@ export default function Home() {
 										href="https://www.linkedin.com/in/toe-tet-aung-myint-b46b421b1/"
 										target="_blank"
 										rel="noreferrer"
-										className="inline-flex items-center justify-center rounded-full border-3 border-fuchsia-400 bg-fuchsia-400/10 px-5 py-2.5 text-xs font-black uppercase tracking-[0.22em] text-fuchsia-100 transition-transform duration-200 hover:-translate-y-1"
+										className="inline-flex items-center justify-center rounded-full border-2 border-fuchsia-400 bg-fuchsia-400/10 px-5 py-2.5 text-xs font-black uppercase tracking-[0.22em] text-fuchsia-100 transition-transform duration-200 hover:-translate-y-1"
 									>
 										Open LinkedIn
 									</a>
@@ -1250,9 +1228,9 @@ export default function Home() {
 					<dialog
 						open
 						aria-labelledby="detail-modal-title"
-						className={`relative z-10 w-full max-w-4xl rounded-[24px] border-3 border-cyan-300 bg-[#050816] shadow-[10px_10px_0_rgba(244,114,182,0.42)] modal-fade-in-up ${modalVisible ? "modal-visible" : ""}`}
+						className={`relative z-10 w-full max-w-4xl rounded-[24px] border-2 border-cyan-300 bg-[#050816] shadow-[10px_10px_0_rgba(244,114,182,0.42)] modal-fade-in-up ${modalVisible ? "modal-visible" : ""}`}
 					>
-						<div className="flex items-center justify-between border-b-3 border-fuchsia-400 bg-[#170628] px-5 py-3">
+						<div className="flex items-center justify-between rounded-t-[24px] border-b-2 border-fuchsia-400 bg-[#170628] px-5 py-3">
 							<div>
 								<p className="font-mono text-[11px] uppercase tracking-[0.3em] text-fuchsia-200">
 									Detail Viewer
@@ -1267,7 +1245,7 @@ export default function Home() {
 							<button
 								type="button"
 								onClick={() => setSelectedDetailEntry(null)}
-								className="rounded-full border-2 border-fuchsia-400 bg-fuchsia-400/10 px-3 py-1 font-mono text-[11px] uppercase tracking-[0.22em] text-fuchsia-100"
+								className="rounded-full border-2 border-fuchsia-400 bg-fuchsia-400/10 px-3 py-1 font-mono text-[11px] uppercase tracking-[0.22em] text-fuchsia-100 cursor-pointer"
 							>
 								Close
 							</button>
@@ -1288,22 +1266,22 @@ export default function Home() {
 										href={selectedDetailEntry.url}
 										target="_blank"
 										rel="noreferrer"
-										className="inline-flex items-center justify-center rounded-full border-3 border-cyan-300 bg-cyan-300 px-4 py-2 text-[11px] font-black uppercase tracking-[0.22em] text-slate-950"
+										className="inline-flex items-center justify-center rounded-full border-2 border-cyan-300 bg-cyan-300 px-4 py-2 text-[11px] font-black uppercase tracking-[0.22em] text-slate-950"
 									>
 										Open Live Site
 									</a>
 								) : null}
 							</div>
 
-							<p className="text-sm leading-7 text-zinc-100">
+							{/* <p className="text-sm leading-7 text-zinc-100">
 								{selectedDetailEntry.summary}
-							</p>
+							</p> */}
 
 							<div className="flex flex-wrap gap-2">
 								{selectedDetailEntry.tags.map((tag, index) => (
 									<span
 										key={index}
-										className="rounded-full border-2 border-lime-300/45 bg-lime-300/10 px-3 py-1.5 font-mono text-[11px] uppercase tracking-[0.18em] text-zinc-100"
+										className="rounded-full border border-lime-300/45 bg-lime-300/10 px-3 py-1.5 font-mono text-[11px] uppercase tracking-[0.18em] text-zinc-100"
 									>
 										{tag}
 									</span>
@@ -1312,11 +1290,8 @@ export default function Home() {
 
 							<div className="grid gap-4">
 								{selectedDetailEntry.highlights.map((item) => (
-									<div
-										key={item.label}
-										className="rounded-[18px] border-2 border-cyan-300/45 bg-slate-950/80 p-4"
-									>
-										<p className="font-mono text-[11px] uppercase tracking-[0.3em] text-fuchsia-200">
+									<div key={item.label}>
+										<p className="font-mono text-[11px] uppercase bold tracking-[0.3em] text-fuchsia-200">
 											{item.label}
 										</p>
 										<p className="mt-3 text-sm leading-7 text-zinc-100">

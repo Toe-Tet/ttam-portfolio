@@ -1,0 +1,19 @@
+
+> ttam-portfolio@0.1.0 dev /opt/homebrew/var/www/ai/ttam-portfolio
+> next dev
+
+⚠ Port 3000 is in use by process 5065, using available port 3001 instead.
+▲ Next.js 16.2.10 (Turbopack)
+- Local:         http://localhost:3001
+- Network:       http://192.168.200.178:3001
+✓ Ready in 243ms
+⨯ Another next dev server is already running.
+
+- Local:        http://localhost:3000
+- PID:          5065
+- Dir:          /opt/homebrew/var/www/ai/ttam-portfolio
+- Log:          .next/dev/logs/next-development.log
+
+Run kill 5065 to stop it.
+[?25h
+ ELIFECYCLE  Command failed with exit code 1.
