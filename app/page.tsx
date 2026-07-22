@@ -342,48 +342,6 @@ const skillGroups = [
 
 const workExperiences: ExperienceEntry[] = [
 	{
-		title: "Backend Developer",
-		subtitle: "Young Investment Group (Fintech)",
-		period: "Nov 2020 - Jun 2024",
-		summary:
-			"Architected a high-performance fintech SaaS ecosystem using NestJS and NextJS with multi-tenant database isolation, shared platform services, and leadership across backend and frontend delivery.",
-		tags: [
-			"NestJS",
-			"Next.js",
-			"Multi-tenant SaaS",
-			"Authentication",
-			"Authorization",
-			"Chat Microservice",
-			"Team Leadership",
-			"Fintech",
-		],
-		roleLabel: "Previous Position",
-		sideNote:
-			"Architected multi-tenant fintech systems, mentored junior developers, and translated product requirements into scalable backend and frontend delivery.",
-		highlights: [
-			{
-				label: "Architecture",
-				detail: "Architected a high-performance SaaS ecosystem using NestJS and NextJS, featuring a sophisticated multi-tenant architecture with isolated database connections for data security and scalability.",
-			},
-			{
-				label: "Leadership",
-				detail: "Led and mentored a cross-functional team of 4 junior developers, overseeing the full-cycle development of core backend services and frontend interfaces, resulting in a 20% increase in team delivery velocity.",
-			},
-			{
-				label: "Platform Services",
-				detail: "Directed the design and deployment of centralized infrastructure, including a unified Authentication/Authorization service and a real-time Chat microservice to support cross-tenant communication.",
-			},
-			{
-				label: "Stakeholder Collaboration",
-				detail: "Collaborated directly with Project Managers and Stakeholders to define system flows, gather technical requirements, and translate business logic into robust system specifications.",
-			},
-			{
-				label: "Stability & Delivery",
-				detail: "Improved platform stability by reducing bugs and optimizing existing codebases, ensuring a smoother transition from development to production deployment.",
-			},
-		],
-	},
-	{
 		title: "Software Engineer",
 		subtitle: "Onenex (Software House)",
 		period: "Nov 2024 - Present",
@@ -426,6 +384,48 @@ const workExperiences: ExperienceEntry[] = [
 			{
 				label: "Analytics & Reporting",
 				detail: "Enhanced data-driven decision-making by integrating Google Analytics 4 and custom reporting dashboards for event management portals.",
+			},
+		],
+	},
+	{
+		title: "Backend Developer",
+		subtitle: "Young Investment Group (Fintech)",
+		period: "Nov 2020 - Jun 2024",
+		summary:
+			"Architected a high-performance fintech SaaS ecosystem using NestJS and NextJS with multi-tenant database isolation, shared platform services, and leadership across backend and frontend delivery.",
+		tags: [
+			"NestJS",
+			"Next.js",
+			"Multi-tenant SaaS",
+			"Authentication",
+			"Authorization",
+			"Chat Microservice",
+			"Team Leadership",
+			"Fintech",
+		],
+		roleLabel: "Previous Position",
+		sideNote:
+			"Architected multi-tenant fintech systems, mentored junior developers, and translated product requirements into scalable backend and frontend delivery.",
+		highlights: [
+			{
+				label: "Architecture",
+				detail: "Architected a high-performance SaaS ecosystem using NestJS and NextJS, featuring a sophisticated multi-tenant architecture with isolated database connections for data security and scalability.",
+			},
+			{
+				label: "Leadership",
+				detail: "Led and mentored a cross-functional team of 4 junior developers, overseeing the full-cycle development of core backend services and frontend interfaces, resulting in a 20% increase in team delivery velocity.",
+			},
+			{
+				label: "Platform Services",
+				detail: "Directed the design and deployment of centralized infrastructure, including a unified Authentication/Authorization service and a real-time Chat microservice to support cross-tenant communication.",
+			},
+			{
+				label: "Stakeholder Collaboration",
+				detail: "Collaborated directly with Project Managers and Stakeholders to define system flows, gather technical requirements, and translate business logic into robust system specifications.",
+			},
+			{
+				label: "Stability & Delivery",
+				detail: "Improved platform stability by reducing bugs and optimizing existing codebases, ensuring a smoother transition from development to production deployment.",
 			},
 		],
 	},
